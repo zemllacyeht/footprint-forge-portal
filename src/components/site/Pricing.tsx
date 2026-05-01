@@ -125,6 +125,46 @@ export const Pricing = () => {
           </div>
         </div>
 
+        {/* SELECTION SUMMARY — appears when anything is selected */}
+        {(hasBuild || hasCare) && (
+          <div className="max-w-7xl mx-auto mb-12 animate-fade-up">
+            <div className="glass rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1 flex flex-wrap items-center gap-2">
+                <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground mr-2">
+                  Your selection
+                </span>
+                {items
+                  .filter((i) => i.category === "Build package" || i.category === "Care plan")
+                  .map((i) => (
+                    <span
+                      key={i.id}
+                      className="inline-flex items-center gap-2 rounded-full bg-secondary/60 border border-border px-3 py-1 text-xs"
+                    >
+                      <span className="text-foreground/90">{i.name}</span>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${i.name}`}
+                        onClick={() => removeItem(i.id)}
+                        className="text-muted-foreground hover:text-destructive transition"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clear}
+                className="text-muted-foreground hover:text-destructive shrink-0"
+              >
+                <Trash2 className="h-4 w-4" />
+                Clear selection
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* PART 1: ONE-TIME BUILD */}
         <div className="max-w-7xl mx-auto mb-24">
           <div className="flex items-center gap-4 mb-10">
