@@ -1,7 +1,74 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2 } from "lucide-react";
+import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2, Search, Camera, PenTool, ChevronDown, ChevronUp } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+
+const addons = [
+  {
+    id: "addon-marketing-collateral",
+    name: "Marketing Collateral",
+    price: "From $249/mo",
+    priceLabel: "$249",
+    priceUnit: "/mo",
+    icon: Megaphone,
+    tagline: "Keep your brand visible everywhere, every month.",
+    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces — designed on-brand and delivered through your client portal.",
+    features: [
+      { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook & LinkedIn" },
+      { icon: Mail, t: "Email Campaigns", d: "Branded headers & templates" },
+      { icon: Megaphone, t: "Digital Ads", d: "Meta, Google & retargeting" },
+      { icon: FileText, t: "Print & One-Pagers", d: "Flyers, menus, signage" },
+    ],
+  },
+  {
+    id: "addon-seo-boost",
+    name: "SEO Boost",
+    price: "From $349/mo",
+    priceLabel: "$349",
+    priceUnit: "/mo",
+    icon: Search,
+    tagline: "Climb search rankings without lifting a finger.",
+    desc: "Monthly keyword strategy, on-page optimization, technical fixes, and a clear performance report so you always know what's moving.",
+    features: [
+      { icon: Search, t: "Keyword Strategy", d: "Targeted to your niche" },
+      { icon: Check, t: "On-page SEO", d: "Titles, meta, structure" },
+      { icon: RefreshCw, t: "Technical Audits", d: "Speed, indexing, schema" },
+      { icon: FileText, t: "Monthly Reporting", d: "Clear, jargon-free" },
+    ],
+  },
+  {
+    id: "addon-content-photography",
+    name: "Content & Photography",
+    price: "From $499",
+    priceLabel: "$499",
+    priceUnit: "one-time",
+    icon: Camera,
+    tagline: "Real photos and real words — built for your launch.",
+    desc: "A professional photo shoot or full copywriting pass tailored to your business, ready to drop straight into your new site.",
+    features: [
+      { icon: Camera, t: "Photo Shoot", d: "On-location or product" },
+      { icon: PenTool, t: "Copywriting", d: "Voice, tone, and CTAs" },
+      { icon: FileText, t: "Page Copy", d: "Home, About, Services" },
+      { icon: Check, t: "Launch-Ready", d: "Delivered drop-in" },
+    ],
+  },
+  {
+    id: "addon-brand-identity",
+    name: "Brand Identity Kit",
+    price: "From $799",
+    priceLabel: "$799",
+    priceUnit: "one-time",
+    icon: PenTool,
+    tagline: "A polished brand system you can use anywhere.",
+    desc: "Logo refresh, color and type system, and a tidy brand guidelines doc so every touchpoint feels intentional and consistent.",
+    features: [
+      { icon: PenTool, t: "Logo Refresh", d: "Primary + variations" },
+      { icon: ImageIcon, t: "Color System", d: "Palette + usage" },
+      { icon: FileText, t: "Type System", d: "Headings & body" },
+      { icon: Check, t: "Brand Guidelines", d: "PDF + assets" },
+    ],
+  },
+];
 
 const tiers = [
   {
@@ -84,9 +151,12 @@ export const Pricing = () => {
   const { addItem, items, removeItem, clear } = useCart();
   const buildIds = new Set(items.filter((i) => i.category === "Build package").map((i) => i.id));
   const careIds = new Set(items.filter((i) => i.category === "Care plan").map((i) => i.id));
+  const addonIds = new Set(items.filter((i) => i.category === "Add-on").map((i) => i.id));
   const hasBuild = buildIds.size > 0;
   const hasCare = careIds.size > 0;
   const careRef = useRef<HTMLDivElement>(null);
+  const addonRef = useRef<HTMLDivElement>(null);
+  const [showAllAddons, setShowAllAddons] = useState(false);
 
   const handleAddBuild = (id: string, name: string, price: string) => {
     const wasEmpty = !buildIds.has(id);
@@ -96,6 +166,16 @@ export const Pricing = () => {
       setTimeout(() => {
         careRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
+    }
+  };
+
+  const handleAddCare = (id: string, name: string, price: string) => {
+    const wasEmpty = !careIds.has(id);
+    addItem({ id, name, price, category: "Care plan" });
+    if (wasEmpty) {
+      setTimeout(() => {
+        addonRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
     }
   };
   return (
@@ -126,7 +206,7 @@ export const Pricing = () => {
         </div>
 
         {/* SELECTION SUMMARY — appears when anything is selected */}
-        {(hasBuild || hasCare) && (
+        {(hasBuild || hasCare || addonIds.size > 0) && (
           <div className="max-w-7xl mx-auto mb-12 animate-fade-up">
             <div className="glass rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1 flex flex-wrap items-center gap-2">
@@ -134,7 +214,7 @@ export const Pricing = () => {
                   Your selection
                 </span>
                 {items
-                  .filter((i) => i.category === "Build package" || i.category === "Care plan")
+                  .filter((i) => i.category === "Build package" || i.category === "Care plan" || i.category === "Add-on")
                   .map((i) => (
                     <span
                       key={i.id}
@@ -379,12 +459,11 @@ export const Pricing = () => {
                       size="sm"
                       className="w-full"
                       onClick={() =>
-                        addItem({
-                          id: careId,
-                          name: p.name,
-                          price: p.price === "Custom" ? "Custom" : `${p.price}/mo`,
-                          category: "Care plan",
-                        })
+                        handleAddCare(
+                          careId,
+                          p.name,
+                          p.price === "Custom" ? "Custom" : `${p.price}/mo`,
+                        )
                       }
                     >
                       <Plus className="h-4 w-4" />
@@ -451,68 +530,128 @@ export const Pricing = () => {
           </div>
         </div>
 
-        {/* Marketing Collateral add-on */}
-        <div className="max-w-7xl mx-auto mt-16">
-          <div className="relative rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-card via-background to-card p-10 md:p-14">
-            <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
-
-            <div className="relative grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                  <Megaphone className="h-3.5 w-3.5 text-accent" />
-                  <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Optional add-on · Stacks with any retainer
-                  </span>
-                </div>
-                <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4">
-                  Marketing collateral, <span className="italic text-gradient-gold">on a monthly drip</span>.
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Your brand never stops working. We design ongoing social posts, email banners,
-                  digital ads, one-pagers, and print pieces. All on-brand, delivered through the same client portal.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <div>
-                    <div className="font-display text-3xl font-medium">From <span className="text-gradient-gold">$249</span><span className="text-base text-muted-foreground font-normal">/mo</span></div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-[0.18em] mt-1">Tiered packages available</div>
-                  </div>
-                  <Button
-                    variant="hero"
-                    size="lg"
-                    onClick={() =>
-                      addItem({
-                        id: "addon-marketing-collateral",
-                        name: "Marketing Collateral",
-                        price: "From $249/mo",
-                        category: "Add-on",
-                      })
-                    }
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add to request
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook, LinkedIn posts & stories" },
-                  { icon: Mail, t: "Email Campaigns", d: "Branded headers, banners, and templates" },
-                  { icon: Megaphone, t: "Digital Ads", d: "Google Display, Meta, and retargeting creative" },
-                  { icon: FileText, t: "Print & One-Pagers", d: "Flyers, business cards, menus, signage" },
-                ].map((c) => (
-                  <div key={c.t} className="glass rounded-xl p-5">
-                    <div className="h-10 w-10 rounded-lg bg-gradient-primary grid place-items-center mb-4 shadow-glow">
-                      <c.icon className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                    <div className="font-medium mb-1">{c.t}</div>
-                    <div className="text-xs text-muted-foreground leading-relaxed">{c.d}</div>
-                  </div>
-                ))}
-              </div>
+        {/* OPTIONAL ADD-ONS */}
+        <div className="max-w-7xl mx-auto mt-20 scroll-mt-28" ref={addonRef}>
+          <div className="flex items-center gap-4 mb-10">
+            <div className="h-10 w-10 rounded-lg bg-gradient-gold grid place-items-center shadow-gold shrink-0">
+              <Sparkles className="h-4 w-4 text-accent-foreground" />
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.25em] text-accent mb-1">Optional · Add-ons</div>
+              <h3 className="font-display text-2xl md:text-3xl font-light">
+                Stack any of these with your plan
+              </h3>
+            </div>
+            <div className="hidden md:block flex-1 h-px bg-border ml-4" />
+            <div className="hidden md:inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs text-muted-foreground">
+              <Plus className="h-3 w-3 text-accent" />
+              <span>Mix & match · Pricing confirmed by email</span>
             </div>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {(showAllAddons ? addons : addons.slice(0, 2)).map((a) => {
+              const selected = addonIds.has(a.id);
+              const Icon = a.icon;
+              return (
+                <div
+                  key={a.id}
+                  className={`relative rounded-2xl p-8 flex flex-col ${
+                    selected
+                      ? "bg-gradient-to-b from-accent/10 to-card border-2 border-accent/40 shadow-gold"
+                      : "glass"
+                  }`}
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-11 w-11 rounded-lg bg-gradient-primary grid place-items-center shadow-glow shrink-0">
+                      <Icon className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-display text-2xl font-medium leading-tight">{a.name}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{a.tagline}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">{a.desc}</p>
+
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {a.features.map((f) => (
+                      <div key={f.t} className="rounded-lg border border-border bg-secondary/30 p-3">
+                        <div className="flex items-center gap-2 mb-1">
+                          <f.icon className="h-3.5 w-3.5 text-accent shrink-0" />
+                          <div className="text-xs font-medium">{f.t}</div>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground leading-snug">{f.d}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-auto flex items-end justify-between gap-4">
+                    <div>
+                      <div className="font-display text-2xl font-medium">
+                        From <span className="text-gradient-gold">{a.priceLabel}</span>
+                        <span className="text-sm text-muted-foreground font-normal ml-1">{a.priceUnit}</span>
+                      </div>
+                    </div>
+                    {selected ? (
+                      <div className="flex items-stretch gap-2">
+                        <div className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-10 px-4 text-sm font-medium">
+                          <Check className="h-4 w-4" />
+                          Added
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${a.name} from request`}
+                          onClick={() => removeItem(a.id)}
+                          className="h-10 w-10 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="glass"
+                        size="default"
+                        onClick={() =>
+                          addItem({
+                            id: a.id,
+                            name: a.name,
+                            price: a.price,
+                            category: "Add-on",
+                          })
+                        }
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add to request
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {addons.length > 2 && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                variant="glass"
+                size="lg"
+                onClick={() => setShowAllAddons((v) => !v)}
+              >
+                {showAllAddons ? (
+                  <>
+                    <ChevronUp className="h-4 w-4" />
+                    Show fewer add-ons
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-4 w-4" />
+                    See more add-ons ({addons.length - 2})
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>
