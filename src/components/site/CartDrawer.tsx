@@ -247,6 +247,66 @@ export const CartDrawer = () => {
                 ))
               )}
 
+              {/* Required care plan picker */}
+              {items.length > 0 && !hasCarePlan && (
+                <div className="pt-4 mt-2 border-t border-border">
+                  <div className="flex items-center gap-2 mb-1">
+                    <ShieldCheck className="h-3.5 w-3.5 text-accent" />
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-accent font-medium">
+                      Choose a care plan · required
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Every project includes a care plan for hosting, security & ongoing support.
+                  </p>
+                  <div className="space-y-2">
+                    {CARE_PLANS.map((p) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() =>
+                          addItem({ id: p.id, name: p.name, price: p.price, category: "Care plan" })
+                        }
+                        className={`w-full text-left rounded-lg p-3 flex items-start gap-3 border transition glass hover:border-accent/40 ${
+                          p.featured ? "border-accent/40" : "border-border"
+                        }`}
+                      >
+                        <div
+                          className={`h-8 w-8 rounded-md grid place-items-center shrink-0 ${
+                            p.featured ? "bg-gradient-gold" : "bg-secondary"
+                          }`}
+                        >
+                          <ShieldCheck
+                            className={`h-3.5 w-3.5 ${
+                              p.featured ? "text-accent-foreground" : "text-muted-foreground"
+                            }`}
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="font-medium text-sm flex items-center gap-1.5">
+                              {p.name}
+                              {p.featured && (
+                                <span className="text-[9px] uppercase tracking-wider text-accent">
+                                  Popular
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-xs text-muted-foreground shrink-0">{p.price}</div>
+                          </div>
+                          <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+                            {p.desc}
+                          </div>
+                        </div>
+                        <div className="h-5 w-5 rounded-full grid place-items-center shrink-0 mt-0.5 border border-border">
+                          <Plus className="h-3 w-3 text-muted-foreground" />
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Optional add-ons */}
               {items.length > 0 && (
                 <div className="pt-4 mt-2 border-t border-border">
