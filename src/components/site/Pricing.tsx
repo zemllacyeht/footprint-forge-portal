@@ -530,68 +530,128 @@ export const Pricing = () => {
           </div>
         </div>
 
-        {/* Marketing Collateral add-on */}
-        <div className="max-w-7xl mx-auto mt-16">
-          <div className="relative rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-card via-background to-card p-10 md:p-14">
-            <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
-
-            <div className="relative grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
-                  <Megaphone className="h-3.5 w-3.5 text-accent" />
-                  <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Optional add-on · Stacks with any retainer
-                  </span>
-                </div>
-                <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4">
-                  Marketing collateral, <span className="italic text-gradient-gold">on a monthly drip</span>.
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  Your brand never stops working. We design ongoing social posts, email banners,
-                  digital ads, one-pagers, and print pieces. All on-brand, delivered through the same client portal.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                  <div>
-                    <div className="font-display text-3xl font-medium">From <span className="text-gradient-gold">$249</span><span className="text-base text-muted-foreground font-normal">/mo</span></div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-[0.18em] mt-1">Tiered packages available</div>
-                  </div>
-                  <Button
-                    variant="hero"
-                    size="lg"
-                    onClick={() =>
-                      addItem({
-                        id: "addon-marketing-collateral",
-                        name: "Marketing Collateral",
-                        price: "From $249/mo",
-                        category: "Add-on",
-                      })
-                    }
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add to request
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook, LinkedIn posts & stories" },
-                  { icon: Mail, t: "Email Campaigns", d: "Branded headers, banners, and templates" },
-                  { icon: Megaphone, t: "Digital Ads", d: "Google Display, Meta, and retargeting creative" },
-                  { icon: FileText, t: "Print & One-Pagers", d: "Flyers, business cards, menus, signage" },
-                ].map((c) => (
-                  <div key={c.t} className="glass rounded-xl p-5">
-                    <div className="h-10 w-10 rounded-lg bg-gradient-primary grid place-items-center mb-4 shadow-glow">
-                      <c.icon className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                    <div className="font-medium mb-1">{c.t}</div>
-                    <div className="text-xs text-muted-foreground leading-relaxed">{c.d}</div>
-                  </div>
-                ))}
-              </div>
+        {/* OPTIONAL ADD-ONS */}
+        <div className="max-w-7xl mx-auto mt-20 scroll-mt-28" ref={addonRef}>
+          <div className="flex items-center gap-4 mb-10">
+            <div className="h-10 w-10 rounded-lg bg-gradient-gold grid place-items-center shadow-gold shrink-0">
+              <Sparkles className="h-4 w-4 text-accent-foreground" />
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.25em] text-accent mb-1">Optional · Add-ons</div>
+              <h3 className="font-display text-2xl md:text-3xl font-light">
+                Stack any of these with your plan
+              </h3>
+            </div>
+            <div className="hidden md:block flex-1 h-px bg-border ml-4" />
+            <div className="hidden md:inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs text-muted-foreground">
+              <Plus className="h-3 w-3 text-accent" />
+              <span>Mix & match · Pricing confirmed by email</span>
             </div>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {(showAllAddons ? addons : addons.slice(0, 2)).map((a) => {
+              const selected = addonIds.has(a.id);
+              const Icon = a.icon;
+              return (
+                <div
+                  key={a.id}
+                  className={`relative rounded-2xl p-8 flex flex-col ${
+                    selected
+                      ? "bg-gradient-to-b from-accent/10 to-card border-2 border-accent/40 shadow-gold"
+                      : "glass"
+                  }`}
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-11 w-11 rounded-lg bg-gradient-primary grid place-items-center shadow-glow shrink-0">
+                      <Icon className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-display text-2xl font-medium leading-tight">{a.name}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{a.tagline}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">{a.desc}</p>
+
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {a.features.map((f) => (
+                      <div key={f.t} className="rounded-lg border border-border bg-secondary/30 p-3">
+                        <div className="flex items-center gap-2 mb-1">
+                          <f.icon className="h-3.5 w-3.5 text-accent shrink-0" />
+                          <div className="text-xs font-medium">{f.t}</div>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground leading-snug">{f.d}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-auto flex items-end justify-between gap-4">
+                    <div>
+                      <div className="font-display text-2xl font-medium">
+                        From <span className="text-gradient-gold">{a.priceLabel}</span>
+                        <span className="text-sm text-muted-foreground font-normal ml-1">{a.priceUnit}</span>
+                      </div>
+                    </div>
+                    {selected ? (
+                      <div className="flex items-stretch gap-2">
+                        <div className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-10 px-4 text-sm font-medium">
+                          <Check className="h-4 w-4" />
+                          Added
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${a.name} from request`}
+                          onClick={() => removeItem(a.id)}
+                          className="h-10 w-10 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="glass"
+                        size="default"
+                        onClick={() =>
+                          addItem({
+                            id: a.id,
+                            name: a.name,
+                            price: a.price,
+                            category: "Add-on",
+                          })
+                        }
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add to request
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {addons.length > 2 && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                variant="glass"
+                size="lg"
+                onClick={() => setShowAllAddons((v) => !v)}
+              >
+                {showAllAddons ? (
+                  <>
+                    <ChevronUp className="h-4 w-4" />
+                    Show fewer add-ons
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-4 w-4" />
+                    See more add-ons ({addons.length - 2})
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>
