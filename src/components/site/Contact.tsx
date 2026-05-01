@@ -8,8 +8,6 @@ import { toast } from "sonner";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-const countWords = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
-
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().min(1, "Email is required").email("Invalid email").max(255),
@@ -17,11 +15,8 @@ const schema = z.object({
   message: z
     .string()
     .trim()
-    .min(1, "Please tell us about your project")
-    .max(2000)
-    .refine((v) => countWords(v) >= 25, {
-      message: "Please share at least 25 words about your project",
-    }),
+    .min(50, "Please share at least 50 characters about your project")
+    .max(2000),
 });
 
 export const Contact = () => {
