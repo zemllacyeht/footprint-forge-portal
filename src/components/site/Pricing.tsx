@@ -357,8 +357,20 @@ export const Pricing = () => {
                     <div className="font-display text-3xl font-medium">From <span className="text-gradient-gold">$249</span><span className="text-base text-muted-foreground font-normal">/mo</span></div>
                     <div className="text-xs text-muted-foreground uppercase tracking-[0.18em] mt-1">Tiered packages available</div>
                   </div>
-                  <Button variant="hero" size="lg" asChild>
-                    <a href="#contact">Add to your plan</a>
+                  <Button
+                    variant="hero"
+                    size="lg"
+                    onClick={() =>
+                      addItem({
+                        id: "addon-marketing-collateral",
+                        name: "Marketing Collateral",
+                        price: "From $249/mo",
+                        category: "Add-on",
+                      })
+                    }
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add to request
                   </Button>
                 </div>
               </div>
