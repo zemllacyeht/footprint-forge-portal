@@ -1,16 +1,17 @@
-import { Lock, Eye, MessageSquare, CreditCard, CheckCircle2 } from "lucide-react";
+import { Fragment } from "react";
+import { Lock, Eye, MessageSquare, CreditCard, CheckCircle2, Compass, PenTool, Code2, Rocket, ArrowRight } from "lucide-react";
 
 const steps = [
-  { n: "01", title: "Discover", desc: "We learn your brand, your customers, and the impression you want to leave." },
-  { n: "02", title: "Design", desc: "You receive custom mockups in your private client portal. Review and approve in real time." },
-  { n: "03", title: "Build", desc: "We engineer your site for speed, SEO, and conversions on modern infrastructure." },
-  { n: "04", title: "Secure Preview & Launch Hub", desc: "A password-protected portal where you preview every page, leave feedback, and pay invoices in one place." },
-  { n: "05", title: "Launch & Grow", desc: "We handle hosting, domains, and ongoing care so you can focus on your customers." },
+  { n: "01", title: "Discover", icon: Compass, desc: "We learn your brand, customers, and the impression you want to leave." },
+  { n: "02", title: "Design", icon: PenTool, desc: "Custom mockups in your private portal. Review and approve in real time." },
+  { n: "03", title: "Build", icon: Code2, desc: "Engineered for speed, SEO, and conversions on modern infrastructure." },
+  { n: "04", title: "Preview Hub", icon: Lock, desc: "Password-protected portal to preview, comment, and pay invoices." },
+  { n: "05", title: "Launch & Grow", icon: Rocket, desc: "We handle hosting, domains, and ongoing care so you focus on customers." },
 ];
 
 export const Process = () => {
   return (
-    <section id="process" className="py-32 relative">
+    <section id="process" className="py-32 relative overflow-hidden bg-gradient-to-b from-background via-card/20 to-background">
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[800px] bg-primary/5 blur-[120px] rounded-full" />
       </div>
@@ -23,21 +24,39 @@ export const Process = () => {
           </h2>
         </div>
 
-        <div className="relative mb-24">
-          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        {/* Horizontal stepped flow */}
+        <div className="relative mb-28">
+          {/* Connecting track (desktop) */}
+          <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
 
-          <div className="grid gap-8 lg:grid-cols-5">
+          <div className="grid gap-10 lg:gap-2 lg:grid-cols-9 lg:items-start">
             {steps.map((s, i) => (
-              <div key={s.n} className="relative">
-                <div className="h-24 w-24 rounded-2xl glass grid place-items-center mb-6 relative">
-                  <span className="font-display text-3xl text-gradient-gold font-medium">{s.n}</span>
-                  {i < steps.length - 1 && (
-                    <div className="hidden lg:block absolute -right-6 top-1/2 h-2 w-2 rounded-full bg-accent shadow-gold" />
-                  )}
+              <Fragment key={s.n}>
+                {/* Step node */}
+                <div className="relative flex lg:flex-col items-start lg:items-center gap-4 lg:gap-0 lg:col-span-1 group">
+                  <div className="relative shrink-0">
+                    <div className="absolute inset-0 rounded-full bg-accent/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative h-20 w-20 rounded-full bg-background border-2 border-accent/40 grid place-items-center shadow-elegant transition-transform group-hover:scale-105">
+                      <s.icon className="h-7 w-7 text-accent" strokeWidth={1.5} />
+                    </div>
+                    <div className="absolute -top-1 -right-1 h-7 w-7 rounded-full bg-accent grid place-items-center shadow-gold">
+                      <span className="font-display text-[11px] font-semibold text-accent-foreground">{s.n}</span>
+                    </div>
+                  </div>
+
+                  <div className="lg:mt-6 lg:text-center flex-1">
+                    <h3 className="font-display text-lg font-medium mb-1.5">{s.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed lg:px-1">{s.desc}</p>
+                  </div>
                 </div>
-                <h3 className="font-display text-xl font-medium mb-3">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </div>
+
+                {/* Connector arrow (desktop only, between steps) */}
+                {i < steps.length - 1 && (
+                  <div className="hidden lg:flex lg:col-span-1 items-center justify-center pt-7">
+                    <ArrowRight className="h-4 w-4 text-accent/60" />
+                  </div>
+                )}
+              </Fragment>
             ))}
           </div>
         </div>
