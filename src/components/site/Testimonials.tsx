@@ -12,7 +12,7 @@ const testimonials = [
   },
   {
     quote:
-      "Hassle-free is the only way to describe it. Hosting, domain, security, monthly updates — one predictable charge, zero surprise invoices. We finally stopped worrying about our website.",
+      "Our brand looks unrecognizable from a year ago lol. But in the best way. The monthly marketing support keep our socials and emails sharp without us lifting a finger.",
     name: "Priya Anand",
     role: "Operations Director",
     company: "Northwood Dental",
