@@ -176,32 +176,35 @@ export const Pricing = () => {
                 {(() => {
                   const tierId = `build-${t.name.toLowerCase()}`;
                   const selected = buildIds.has(tierId);
-                  return (
-                    <Button
-                      variant={selected ? "gold" : t.featured ? "hero" : "glass"}
-                      size="lg"
-                      className="w-full mb-8"
-                      disabled={selected}
-                      onClick={() =>
-                        addItem({
-                          id: tierId,
-                          name: t.name,
-                          price: `${t.price} one-time`,
-                          category: "Build package",
-                        })
-                      }
-                    >
-                      {selected ? (
-                        <>
+                  if (selected) {
+                    return (
+                      <div className="w-full mb-8 flex items-stretch gap-2">
+                        <div className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-12 px-4 text-sm font-medium">
                           <Check className="h-4 w-4" />
                           Selected
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="h-4 w-4" />
-                          Add to request
-                        </>
-                      )}
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${t.name} from request`}
+                          onClick={() => removeItem(tierId)}
+                          className="h-12 w-12 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  }
+                  return (
+                    <Button
+                      variant={t.featured ? "hero" : "glass"}
+                      size="lg"
+                      className="w-full mb-8"
+                      onClick={() =>
+                        handleAddBuild(tierId, t.name, `${t.price} one-time`)
+                      }
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add to request
                     </Button>
                   );
                 })()}
