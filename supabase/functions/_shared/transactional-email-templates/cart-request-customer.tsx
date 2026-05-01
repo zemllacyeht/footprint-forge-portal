@@ -24,7 +24,10 @@ const CartRequestCustomerEmail = ({
   items = [],
 }: CartRequestCustomerProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
+    <Head>
+      <meta name="x-apple-disable-message-reformatting" />
+      <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
+    </Head>
     <Preview>Your request is in. We will be in touch within 24 hours.</Preview>
     <Body style={main}>
       <Container style={outerWrap}>
@@ -32,10 +35,12 @@ const CartRequestCustomerEmail = ({
           {/* Header */}
           <Section style={headerSection}>
             <Text style={brandKicker}>BUILD YOUR FOOTPRINT</Text>
+            <Text style={brandOrnament}>✦</Text>
           </Section>
 
           <Section style={dividerWrap}>
             <Hr style={topDivider} />
+            <Section style={goldAccentBar} />
           </Section>
 
           {/* Greeting */}
@@ -108,17 +113,32 @@ export const template = {
 // outer bg: #F3F2EF (warm off-white)
 // card: #FFFFFF
 // forest green accent: #2B5B4B
+// gold accent (from site): #E5B546
 // ink: #2D2A26
 // body text: #5B5752
 // muted: #A5A29A / #9D9B96
 // subtle bg: #F9F8F6
 // hairline: #E8E6E1
 
+// Email-safe font stacks. Outlook (Word engine) and many Gmail clients
+// strip unknown web fonts; these stacks degrade cleanly to fonts every
+// major mail client ships with, so type, weight, and letter-spacing
+// render consistently across Apple Mail, Gmail, and Outlook.
+const SERIF_STACK =
+  "Georgia, 'Times New Roman', Times, 'Hoefler Text', Garamond, serif"
+const SANS_STACK =
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+
+const GOLD = '#E5B546'
+const GREEN = '#2B5B4B'
+
 const main = {
   backgroundColor: '#ffffff',
-  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+  fontFamily: SANS_STACK,
   margin: 0,
   padding: '40px 20px',
+  // Force consistent rendering on Outlook
+  msoLineHeightRule: 'exactly' as const,
 }
 const outerWrap = {
   backgroundColor: '#F3F2EF',
@@ -134,19 +154,29 @@ const card = {
   borderRadius: '8px',
   padding: 0,
   boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+  // Subtle gold top border for premium accent
+  borderTop: `3px solid ${GOLD}`,
 }
 const headerSection = {
-  padding: '40px 40px 30px 40px',
+  padding: '40px 40px 20px 40px',
   textAlign: 'center' as const,
 }
 const brandKicker = {
   margin: 0,
-  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-  fontSize: '16px',
-  fontWeight: 400,
-  letterSpacing: '3px',
-  color: '#A5A29A',
+  fontFamily: SANS_STACK,
+  fontSize: '12px',
+  fontWeight: 600,
+  // mso-friendly: use a value Outlook respects
+  letterSpacing: '4px',
+  color: GOLD,
   textTransform: 'uppercase' as const,
+}
+const brandOrnament = {
+  margin: '12px 0 0',
+  color: GOLD,
+  fontSize: '14px',
+  letterSpacing: '0.4em',
+  fontFamily: SERIF_STACK,
 }
 const dividerWrap = { padding: '0 40px' }
 const topDivider = {
@@ -154,40 +184,55 @@ const topDivider = {
   borderTop: '1px solid #E8E6E1',
   margin: 0,
 }
-const bodySection = { padding: '35px 40px 25px 40px' }
+const goldAccentBar = {
+  width: '48px',
+  height: '2px',
+  backgroundColor: GOLD,
+  margin: '18px auto 0',
+}
+const bodySection = { padding: '28px 40px 25px 40px' }
 const h1 = {
   margin: '0 0 16px',
-  fontFamily: "'Georgia', 'Times New Roman', serif",
+  fontFamily: SERIF_STACK,
   fontSize: '28px',
   fontWeight: 400,
   color: '#2D2A26',
   lineHeight: '1.2',
+  letterSpacing: '-0.01em',
 }
 const lede = {
   margin: '0 0 20px',
+  fontFamily: SANS_STACK,
   fontSize: '16px',
   lineHeight: '1.7',
   color: '#5B5752',
 }
-const emphasis = { color: '#2D2A26', fontWeight: 700 }
+const emphasis = {
+  color: GREEN,
+  fontWeight: 700,
+  borderBottom: `2px solid ${GOLD}`,
+  paddingBottom: '1px',
+}
 
 const selectionWrap = { padding: '0 40px 30px' }
 const selectionCard = {
   backgroundColor: '#F9F8F6',
-  borderLeft: '4px solid #2B5B4B',
+  borderLeft: `4px solid ${GREEN}`,
   borderRadius: '0 6px 6px 0',
   padding: '20px 24px',
 }
 const selectionLabel = {
   margin: '0 0 10px',
-  fontSize: '13px',
-  fontWeight: 600,
-  letterSpacing: '1px',
-  color: '#A5A29A',
+  fontFamily: SANS_STACK,
+  fontSize: '11px',
+  fontWeight: 700,
+  letterSpacing: '2px',
+  color: GOLD,
   textTransform: 'uppercase' as const,
 }
 const selectionEmpty = {
   margin: 0,
+  fontFamily: SANS_STACK,
   fontSize: '15px',
   color: '#5B5752',
 }
@@ -199,20 +244,26 @@ const selectionItem = {
 }
 const itemName = {
   margin: 0,
-  fontSize: '18px',
-  fontWeight: 700,
+  fontFamily: SERIF_STACK,
+  fontSize: '19px',
+  fontWeight: 500,
   color: '#2D2A26',
   lineHeight: '1.4',
+  letterSpacing: '-0.01em',
 }
 const itemCategory = {
+  fontFamily: SANS_STACK,
   fontWeight: 400,
   color: '#A5A29A',
-  fontSize: '14px',
+  fontSize: '13px',
+  letterSpacing: '0.02em',
 }
 const itemMeta = {
   margin: '4px 0 0',
-  fontSize: '16px',
-  color: '#5B5752',
+  fontFamily: SANS_STACK,
+  fontSize: '15px',
+  color: GOLD,
+  fontWeight: 600,
 }
 
 const ctaWrap = {
@@ -221,16 +272,19 @@ const ctaWrap = {
 }
 const ctaButton = {
   display: 'inline-block',
-  backgroundColor: '#2B5B4B',
+  backgroundColor: GREEN,
   color: '#ffffff',
-  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-  fontSize: '16px',
+  fontFamily: SANS_STACK,
+  fontSize: '14px',
   fontWeight: 600,
-  letterSpacing: '0.5px',
+  letterSpacing: '2px',
+  textTransform: 'uppercase' as const,
   textDecoration: 'none',
-  padding: '16px 34px',
+  padding: '16px 36px',
   borderRadius: '6px',
-  border: '2px solid #2B5B4B',
+  border: `2px solid ${GREEN}`,
+  // Subtle gold inner glow via box-shadow (Apple Mail / iOS)
+  boxShadow: `0 0 0 3px rgba(229, 181, 70, 0.15)`,
 }
 
 const signatureWrap = { padding: '0 40px 40px' }
@@ -241,14 +295,16 @@ const bottomDivider = {
 }
 const signoffLine = {
   margin: 0,
-  fontFamily: "'Georgia', serif",
+  fontFamily: SERIF_STACK,
   fontStyle: 'italic' as const,
   fontSize: '18px',
   color: '#2D2A26',
 }
 const signoffName = {
   margin: '8px 0 0',
-  fontSize: '16px',
-  fontWeight: 600,
-  color: '#2D2A26',
+  fontFamily: SERIF_STACK,
+  fontSize: '17px',
+  fontStyle: 'italic' as const,
+  fontWeight: 500,
+  color: GOLD,
 }
