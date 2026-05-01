@@ -324,6 +324,15 @@ export const CartDrawer = () => {
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                 />
+                {!hasCarePlan && (
+                  <div className="rounded-lg border border-accent/40 bg-accent/10 p-3 flex items-start gap-2.5">
+                    <ShieldCheck className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                    <div className="text-xs text-foreground/90 leading-relaxed">
+                      <span className="font-medium">A care plan is required</span> to request a quote.
+                      It keeps your site secure, hosted and supported after launch.
+                    </div>
+                  </div>
+                )}
                 <Button
                   variant="hero"
                   className="w-full"
@@ -347,6 +356,43 @@ export const CartDrawer = () => {
           </>
         )}
       </SheetContent>
+
+      <AlertDialog open={carePromptOpen} onOpenChange={setCarePromptOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="h-10 w-10 rounded-full bg-accent/15 grid place-items-center mb-2">
+              <ShieldCheck className="h-5 w-5 text-accent" />
+            </div>
+            <AlertDialogTitle className="font-display text-2xl">
+              Choose a care plan to continue
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm leading-relaxed">
+              Every project includes one of our care plans. It covers hosting,
+              security, monthly updates and ongoing support so your site stays
+              fast, safe and looked after long after launch.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setCarePromptOpen(false);
+                closeCart();
+                setTimeout(() => {
+                  const el = document.getElementById("pricing");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  } else {
+                    window.location.href = "/pricing#pricing";
+                  }
+                }, 200);
+              }}
+            >
+              View care plans
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 };
