@@ -5,9 +5,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { ShoppingBag, Minus, Plus, X, Loader2, Check, Trash2 } from "lucide-react";
+import { ShoppingBag, Minus, Plus, X, Loader2, Check, Trash2, Megaphone, Search, Camera, PenTool, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+
+const ADDONS = [
+  {
+    id: "addon-marketing-collateral",
+    name: "Marketing Collateral",
+    price: "From $249/mo",
+    desc: "Ongoing social, email, ads & print design.",
+    icon: Megaphone,
+  },
+  {
+    id: "addon-seo-boost",
+    name: "SEO Boost",
+    price: "From $349/mo",
+    desc: "Keyword strategy, on-page SEO & monthly reporting.",
+    icon: Search,
+  },
+  {
+    id: "addon-content-photography",
+    name: "Content & Photography",
+    price: "From $499",
+    desc: "Pro photo shoot or copywriting for your launch.",
+    icon: Camera,
+  },
+  {
+    id: "addon-brand-identity",
+    name: "Brand Identity Kit",
+    price: "From $799",
+    desc: "Logo refresh, color system & brand guidelines.",
+    icon: PenTool,
+  },
+];
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -18,7 +49,7 @@ const schema = z.object({
 });
 
 export const CartDrawer = () => {
-  const { items, count, isOpen, closeCart, removeItem, updateQuantity, clear } = useCart();
+  const { items, count, isOpen, closeCart, removeItem, updateQuantity, clear, addItem } = useCart();
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -175,6 +206,73 @@ export const CartDrawer = () => {
                     </button>
                   </div>
                 ))
+              )}
+
+              {/* Optional add-ons */}
+              {items.length > 0 && (
+                <div className="pt-4 mt-2 border-t border-border">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Sparkles className="h-3.5 w-3.5 text-accent" />
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-accent font-medium">
+                      Optional add-ons
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Stack any of these with your selection — pricing confirmed by email.
+                  </p>
+                  <div className="space-y-2">
+                    {ADDONS.map((a) => {
+                      const selected = items.some((i) => i.id === a.id);
+                      const Icon = a.icon;
+                      return (
+                        <button
+                          key={a.id}
+                          type="button"
+                          onClick={() =>
+                            selected
+                              ? removeItem(a.id)
+                              : addItem({ id: a.id, name: a.name, price: a.price, category: "Add-on" })
+                          }
+                          className={`w-full text-left rounded-lg p-3 flex items-start gap-3 border transition ${
+                            selected
+                              ? "border-accent/50 bg-accent/10"
+                              : "border-border glass hover:border-accent/30"
+                          }`}
+                        >
+                          <div
+                            className={`h-8 w-8 rounded-md grid place-items-center shrink-0 ${
+                              selected ? "bg-gradient-gold" : "bg-secondary"
+                            }`}
+                          >
+                            <Icon
+                              className={`h-3.5 w-3.5 ${
+                                selected ? "text-accent-foreground" : "text-muted-foreground"
+                              }`}
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="font-medium text-sm">{a.name}</div>
+                              <div className="text-xs text-muted-foreground shrink-0">{a.price}</div>
+                            </div>
+                            <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+                              {a.desc}
+                            </div>
+                          </div>
+                          <div
+                            className={`h-5 w-5 rounded-full grid place-items-center shrink-0 mt-0.5 ${
+                              selected
+                                ? "bg-gradient-gold text-accent-foreground"
+                                : "border border-border"
+                            }`}
+                          >
+                            {selected ? <Check className="h-3 w-3" /> : <Plus className="h-3 w-3 text-muted-foreground" />}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
 
