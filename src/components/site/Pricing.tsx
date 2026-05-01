@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Megaphone, Mail, Image as ImageIcon, FileText } from "lucide-react";
 
 const tiers = [
   {
@@ -102,6 +102,58 @@ export const Pricing = () => {
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* Marketing Collateral add-on */}
+        <div className="max-w-7xl mx-auto mt-16">
+          <div className="relative rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-card via-background to-card p-10 md:p-14">
+            <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+
+            <div className="relative grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6">
+                  <Megaphone className="h-3.5 w-3.5 text-accent" />
+                  <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                    Add-on · Available with any plan
+                  </span>
+                </div>
+                <h3 className="font-display text-3xl md:text-4xl font-light leading-tight mb-4">
+                  Marketing collateral, <span className="italic text-gradient-gold">on a monthly drip</span>.
+                </h3>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  Your brand never stops working. We design ongoing social posts, email banners,
+                  digital ads, one-pagers, and print pieces. All on-brand, delivered through the same client portal.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <div>
+                    <div className="font-display text-3xl font-medium">From <span className="text-gradient-gold">$249</span><span className="text-base text-muted-foreground font-normal">/mo</span></div>
+                    <div className="text-xs text-muted-foreground uppercase tracking-[0.18em] mt-1">Tiered packages available</div>
+                  </div>
+                  <Button variant="hero" size="lg" asChild>
+                    <a href="#contact">Add to your plan</a>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook, LinkedIn posts & stories" },
+                  { icon: Mail, t: "Email Campaigns", d: "Branded headers, banners, and templates" },
+                  { icon: Megaphone, t: "Digital Ads", d: "Google Display, Meta, and retargeting creative" },
+                  { icon: FileText, t: "Print & One-Pagers", d: "Flyers, business cards, menus, signage" },
+                ].map((c) => (
+                  <div key={c.t} className="glass rounded-xl p-5">
+                    <div className="h-10 w-10 rounded-lg bg-gradient-primary grid place-items-center mb-4 shadow-glow">
+                      <c.icon className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                    <div className="font-medium mb-1">{c.t}</div>
+                    <div className="text-xs text-muted-foreground leading-relaxed">{c.d}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
