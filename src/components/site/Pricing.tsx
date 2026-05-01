@@ -1,7 +1,74 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2 } from "lucide-react";
+import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2, Search, Camera, PenTool, ChevronDown, ChevronUp } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+
+const addons = [
+  {
+    id: "addon-marketing-collateral",
+    name: "Marketing Collateral",
+    price: "From $249/mo",
+    priceLabel: "$249",
+    priceUnit: "/mo",
+    icon: Megaphone,
+    tagline: "Keep your brand visible everywhere, every month.",
+    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces — designed on-brand and delivered through your client portal.",
+    features: [
+      { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook & LinkedIn" },
+      { icon: Mail, t: "Email Campaigns", d: "Branded headers & templates" },
+      { icon: Megaphone, t: "Digital Ads", d: "Meta, Google & retargeting" },
+      { icon: FileText, t: "Print & One-Pagers", d: "Flyers, menus, signage" },
+    ],
+  },
+  {
+    id: "addon-seo-boost",
+    name: "SEO Boost",
+    price: "From $349/mo",
+    priceLabel: "$349",
+    priceUnit: "/mo",
+    icon: Search,
+    tagline: "Climb search rankings without lifting a finger.",
+    desc: "Monthly keyword strategy, on-page optimization, technical fixes, and a clear performance report so you always know what's moving.",
+    features: [
+      { icon: Search, t: "Keyword Strategy", d: "Targeted to your niche" },
+      { icon: Check, t: "On-page SEO", d: "Titles, meta, structure" },
+      { icon: RefreshCw, t: "Technical Audits", d: "Speed, indexing, schema" },
+      { icon: FileText, t: "Monthly Reporting", d: "Clear, jargon-free" },
+    ],
+  },
+  {
+    id: "addon-content-photography",
+    name: "Content & Photography",
+    price: "From $499",
+    priceLabel: "$499",
+    priceUnit: "one-time",
+    icon: Camera,
+    tagline: "Real photos and real words — built for your launch.",
+    desc: "A professional photo shoot or full copywriting pass tailored to your business, ready to drop straight into your new site.",
+    features: [
+      { icon: Camera, t: "Photo Shoot", d: "On-location or product" },
+      { icon: PenTool, t: "Copywriting", d: "Voice, tone, and CTAs" },
+      { icon: FileText, t: "Page Copy", d: "Home, About, Services" },
+      { icon: Check, t: "Launch-Ready", d: "Delivered drop-in" },
+    ],
+  },
+  {
+    id: "addon-brand-identity",
+    name: "Brand Identity Kit",
+    price: "From $799",
+    priceLabel: "$799",
+    priceUnit: "one-time",
+    icon: PenTool,
+    tagline: "A polished brand system you can use anywhere.",
+    desc: "Logo refresh, color and type system, and a tidy brand guidelines doc so every touchpoint feels intentional and consistent.",
+    features: [
+      { icon: PenTool, t: "Logo Refresh", d: "Primary + variations" },
+      { icon: ImageIcon, t: "Color System", d: "Palette + usage" },
+      { icon: FileText, t: "Type System", d: "Headings & body" },
+      { icon: Check, t: "Brand Guidelines", d: "PDF + assets" },
+    ],
+  },
+];
 
 const tiers = [
   {
