@@ -31,9 +31,9 @@ export const Process = () => {
 
           <div className="grid gap-10 lg:gap-2 lg:grid-cols-9 lg:items-start">
             {steps.map((s, i) => (
-              <>
+              <Fragment key={s.n}>
                 {/* Step node */}
-                <div key={s.n} className="relative flex lg:flex-col items-start lg:items-center gap-4 lg:gap-0 lg:col-span-1 group">
+                <div className="relative flex lg:flex-col items-start lg:items-center gap-4 lg:gap-0 lg:col-span-1 group">
                   <div className="relative shrink-0">
                     <div className="absolute inset-0 rounded-full bg-accent/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative h-20 w-20 rounded-full bg-background border-2 border-accent/40 grid place-items-center shadow-elegant transition-transform group-hover:scale-105">
