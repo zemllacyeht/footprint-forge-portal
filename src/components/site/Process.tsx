@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Lock, Eye, MessageSquare, CreditCard, CheckCircle2, Compass, PenTool, Code2, Rocket, ArrowRight } from "lucide-react";
 
 const steps = [
