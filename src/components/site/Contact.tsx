@@ -109,6 +109,13 @@ export const Contact = () => {
             <p className="text-xs text-muted-foreground text-center">
               We respect your privacy. No spam, ever.
             </p>
+            <p className="text-xs text-muted-foreground text-center pt-2 border-t border-border/50">
+              Already a client?{" "}
+              <a href="/login" className="text-accent hover:text-accent/80 underline underline-offset-2 transition-colors">
+                Log in to your project portal
+              </a>
+              .
+            </p>
           </form>
         </div>
       </div>
