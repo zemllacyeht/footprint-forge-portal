@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { ShoppingBag, Minus, Plus, X, Loader2, Check } from "lucide-react";
+import { ShoppingBag, Minus, Plus, X, Loader2, Check, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
@@ -101,10 +101,22 @@ export const CartDrawer = () => {
     <Sheet open={isOpen} onOpenChange={(o) => (o ? null : closeCart())}>
       <SheetContent className="w-full sm:max-w-md flex flex-col">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <ShoppingBag className="h-4 w-4" />
-            Your selection {count > 0 && <span className="text-muted-foreground">({count})</span>}
-          </SheetTitle>
+          <div className="flex items-center justify-between gap-2">
+            <SheetTitle className="flex items-center gap-2">
+              <ShoppingBag className="h-4 w-4" />
+              Your selection {count > 0 && <span className="text-muted-foreground">({count})</span>}
+            </SheetTitle>
+            {items.length > 0 && !done && (
+              <button
+                type="button"
+                onClick={clear}
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Clear
+              </button>
+            )}
+          </div>
         </SheetHeader>
 
         {done ? (

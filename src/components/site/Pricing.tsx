@@ -1,5 +1,6 @@
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles } from "lucide-react";
+import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
 const tiers = [
@@ -80,11 +81,23 @@ const carePlans = [
 ];
 
 export const Pricing = () => {
-  const { addItem, items } = useCart();
+  const { addItem, items, removeItem, clear } = useCart();
   const buildIds = new Set(items.filter((i) => i.category === "Build package").map((i) => i.id));
   const careIds = new Set(items.filter((i) => i.category === "Care plan").map((i) => i.id));
   const hasBuild = buildIds.size > 0;
   const hasCare = careIds.size > 0;
+  const careRef = useRef<HTMLDivElement>(null);
+
+  const handleAddBuild = (id: string, name: string, price: string) => {
+    const wasEmpty = !buildIds.has(id);
+    addItem({ id, name, price, category: "Build package" });
+    if (wasEmpty && !hasCare) {
+      // Wait a tick so the prompt banner mounts before scrolling
+      setTimeout(() => {
+        careRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  };
   return (
     <section id="pricing" className="py-32 relative">
       <div className="container">
@@ -111,6 +124,46 @@ export const Pricing = () => {
             </div>
           </div>
         </div>
+
+        {/* SELECTION SUMMARY — appears when anything is selected */}
+        {(hasBuild || hasCare) && (
+          <div className="max-w-7xl mx-auto mb-12 animate-fade-up">
+            <div className="glass rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1 flex flex-wrap items-center gap-2">
+                <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground mr-2">
+                  Your selection
+                </span>
+                {items
+                  .filter((i) => i.category === "Build package" || i.category === "Care plan")
+                  .map((i) => (
+                    <span
+                      key={i.id}
+                      className="inline-flex items-center gap-2 rounded-full bg-secondary/60 border border-border px-3 py-1 text-xs"
+                    >
+                      <span className="text-foreground/90">{i.name}</span>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${i.name}`}
+                        onClick={() => removeItem(i.id)}
+                        className="text-muted-foreground hover:text-destructive transition"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clear}
+                className="text-muted-foreground hover:text-destructive shrink-0"
+              >
+                <Trash2 className="h-4 w-4" />
+                Clear selection
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* PART 1: ONE-TIME BUILD */}
         <div className="max-w-7xl mx-auto mb-24">
@@ -163,32 +216,35 @@ export const Pricing = () => {
                 {(() => {
                   const tierId = `build-${t.name.toLowerCase()}`;
                   const selected = buildIds.has(tierId);
-                  return (
-                    <Button
-                      variant={selected ? "gold" : t.featured ? "hero" : "glass"}
-                      size="lg"
-                      className="w-full mb-8"
-                      disabled={selected}
-                      onClick={() =>
-                        addItem({
-                          id: tierId,
-                          name: t.name,
-                          price: `${t.price} one-time`,
-                          category: "Build package",
-                        })
-                      }
-                    >
-                      {selected ? (
-                        <>
+                  if (selected) {
+                    return (
+                      <div className="w-full mb-8 flex items-stretch gap-2">
+                        <div className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-12 px-4 text-sm font-medium">
                           <Check className="h-4 w-4" />
                           Selected
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="h-4 w-4" />
-                          Add to request
-                        </>
-                      )}
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${t.name} from request`}
+                          onClick={() => removeItem(tierId)}
+                          className="h-12 w-12 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  }
+                  return (
+                    <Button
+                      variant={t.featured ? "hero" : "glass"}
+                      size="lg"
+                      className="w-full mb-8"
+                      onClick={() =>
+                        handleAddBuild(tierId, t.name, `${t.price} one-time`)
+                      }
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add to request
                     </Button>
                   );
                 })()}
@@ -239,7 +295,7 @@ export const Pricing = () => {
         )}
 
         {/* PART 2: MONTHLY RETAINER */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto scroll-mt-28" ref={careRef}>
           <div className="flex items-center gap-4 mb-10">
             <div className="h-10 w-10 rounded-lg bg-gradient-gold grid place-items-center shadow-gold shrink-0">
               <Repeat className="h-4 w-4 text-accent-foreground" />
@@ -299,12 +355,29 @@ export const Pricing = () => {
                 {(() => {
                   const careId = `care-${p.name.toLowerCase().replace(/\s+/g, "-")}`;
                   const selected = careIds.has(careId);
+                  if (selected) {
+                    return (
+                      <div className="w-full flex items-stretch gap-2">
+                        <div className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-9 px-3 text-sm font-medium">
+                          <Check className="h-4 w-4" />
+                          Selected
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${p.name} from request`}
+                          onClick={() => removeItem(careId)}
+                          className="h-9 w-9 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  }
                   return (
                     <Button
-                      variant={selected ? "gold" : p.featured ? "gold" : "glass"}
+                      variant={p.featured ? "gold" : "glass"}
                       size="sm"
                       className="w-full"
-                      disabled={selected}
                       onClick={() =>
                         addItem({
                           id: careId,
@@ -314,17 +387,8 @@ export const Pricing = () => {
                         })
                       }
                     >
-                      {selected ? (
-                        <>
-                          <Check className="h-4 w-4" />
-                          Selected
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="h-4 w-4" />
-                          Add {p.name.split(" ")[0]}
-                        </>
-                      )}
+                      <Plus className="h-4 w-4" />
+                      {hasCare ? `Switch to ${p.name.split(" ")[0]}` : `Add ${p.name.split(" ")[0]}`}
                     </Button>
                   );
                 })()}
