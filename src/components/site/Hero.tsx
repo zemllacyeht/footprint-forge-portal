@@ -39,8 +39,8 @@ export const Hero = () => {
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12 leading-relaxed animate-fade-up" style={{ animationDelay: "0.1s" }}>
             More than a website. A long-term partnership. We shape your brand identity,
-            launch a site your customers love, and keep it secure with managed hosting,
-            a private client portal, and support that grows with you.
+            launch a site your customers love, and keep your marketing fresh with
+            managed hosting, a private client portal, and ongoing collateral design.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{ animationDelay: "0.2s" }}>
