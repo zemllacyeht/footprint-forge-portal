@@ -130,10 +130,10 @@ export const Contact = () => {
                 <Label htmlFor="message">Tell us about your project</Label>
                 <span
                   className={`text-xs ${
-                    messageWords >= 25 ? "text-primary" : "text-muted-foreground"
+                    messageChars >= 50 ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
-                  {messageWords}/25 words
+                  {messageChars}/50 characters
                 </span>
               </div>
               <Textarea
@@ -142,11 +142,7 @@ export const Contact = () => {
                 rows={5}
                 maxLength={2000}
                 required
-                onChange={(e) =>
-                  setMessageWords(
-                    e.target.value.trim().split(/\s+/).filter(Boolean).length
-                  )
-                }
+                onChange={(e) => setMessageChars(e.target.value.trim().length)}
                 className="bg-background/50 resize-none"
               />
             </div>
