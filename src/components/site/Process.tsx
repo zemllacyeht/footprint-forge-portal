@@ -52,11 +52,11 @@ export const Process = () => {
 
                 {/* Connector arrow (desktop only, between steps) */}
                 {i < steps.length - 1 && (
-                  <div key={`arrow-${i}`} className="hidden lg:flex lg:col-span-1 items-center justify-center pt-7">
+                  <div className="hidden lg:flex lg:col-span-1 items-center justify-center pt-7">
                     <ArrowRight className="h-4 w-4 text-accent/60" />
                   </div>
                 )}
-              </>
+              </Fragment>
             ))}
           </div>
         </div>
