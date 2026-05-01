@@ -49,7 +49,7 @@ const schema = z.object({
 });
 
 export const CartDrawer = () => {
-  const { items, count, isOpen, closeCart, removeItem, updateQuantity, clear } = useCart();
+  const { items, count, isOpen, closeCart, removeItem, updateQuantity, clear, addItem } = useCart();
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
