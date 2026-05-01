@@ -255,7 +255,7 @@ export const Pricing = () => {
         )}
 
         {/* PART 2: MONTHLY RETAINER */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto scroll-mt-28" ref={careRef}>
           <div className="flex items-center gap-4 mb-10">
             <div className="h-10 w-10 rounded-lg bg-gradient-gold grid place-items-center shadow-gold shrink-0">
               <Repeat className="h-4 w-4 text-accent-foreground" />
@@ -315,12 +315,29 @@ export const Pricing = () => {
                 {(() => {
                   const careId = `care-${p.name.toLowerCase().replace(/\s+/g, "-")}`;
                   const selected = careIds.has(careId);
+                  if (selected) {
+                    return (
+                      <div className="w-full flex items-stretch gap-2">
+                        <div className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-gold text-accent-foreground shadow-gold h-9 px-3 text-sm font-medium">
+                          <Check className="h-4 w-4" />
+                          Selected
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${p.name} from request`}
+                          onClick={() => removeItem(careId)}
+                          className="h-9 w-9 grid place-items-center rounded-md glass hover:border-destructive/50 hover:text-destructive transition"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    );
+                  }
                   return (
                     <Button
-                      variant={selected ? "gold" : p.featured ? "gold" : "glass"}
+                      variant={p.featured ? "gold" : "glass"}
                       size="sm"
                       className="w-full"
-                      disabled={selected}
                       onClick={() =>
                         addItem({
                           id: careId,
@@ -330,17 +347,8 @@ export const Pricing = () => {
                         })
                       }
                     >
-                      {selected ? (
-                        <>
-                          <Check className="h-4 w-4" />
-                          Selected
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="h-4 w-4" />
-                          Add {p.name.split(" ")[0]}
-                        </>
-                      )}
+                      <Plus className="h-4 w-4" />
+                      {hasCare ? `Switch to ${p.name.split(" ")[0]}` : `Add ${p.name.split(" ")[0]}`}
                     </Button>
                   );
                 })()}
