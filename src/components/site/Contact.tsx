@@ -8,8 +8,6 @@ import { toast } from "sonner";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-const countWords = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
-
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().min(1, "Email is required").email("Invalid email").max(255),
@@ -17,16 +15,13 @@ const schema = z.object({
   message: z
     .string()
     .trim()
-    .min(1, "Please tell us about your project")
-    .max(2000)
-    .refine((v) => countWords(v) >= 25, {
-      message: "Please share at least 25 words about your project",
-    }),
+    .min(50, "Please share at least 50 characters about your project")
+    .max(2000),
 });
 
 export const Contact = () => {
   const [loading, setLoading] = useState(false);
-  const [messageWords, setMessageWords] = useState(0);
+  const [messageChars, setMessageChars] = useState(0);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,7 +56,7 @@ export const Contact = () => {
       if (error) throw error;
       toast.success("Message received. We'll be in touch within 24 hours.");
       form.reset();
-      setMessageWords(0);
+      setMessageChars(0);
     } catch (err) {
       console.error(err);
       toast.error("Could not send message. Please try again.");
@@ -135,10 +130,10 @@ export const Contact = () => {
                 <Label htmlFor="message">Tell us about your project</Label>
                 <span
                   className={`text-xs ${
-                    messageWords >= 25 ? "text-primary" : "text-muted-foreground"
+                    messageChars >= 50 ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
-                  {messageWords}/25 words
+                  {messageChars}/50 characters
                 </span>
               </div>
               <Textarea
@@ -147,11 +142,7 @@ export const Contact = () => {
                 rows={5}
                 maxLength={2000}
                 required
-                onChange={(e) =>
-                  setMessageWords(
-                    e.target.value.trim().split(/\s+/).filter(Boolean).length
-                  )
-                }
+                onChange={(e) => setMessageChars(e.target.value.trim().length)}
                 className="bg-background/50 resize-none"
               />
             </div>
