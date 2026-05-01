@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -17,9 +18,10 @@ const schema = z.object({
 export const Contact = () => {
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const parsed = schema.safeParse({
       name: fd.get("name"),
       email: fd.get("email"),
@@ -32,11 +34,29 @@ export const Contact = () => {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const id = crypto.randomUUID();
+      const { error } = await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "contact-message-customer",
+          recipientEmail: parsed.data.email,
+          idempotencyKey: `contact-message-${id}`,
+          templateData: {
+            customerName: parsed.data.name,
+            business: parsed.data.business,
+            message: parsed.data.message,
+          },
+        },
+      });
+      if (error) throw error;
       toast.success("Message received. We'll be in touch within 24 hours.");
-      (e.target as HTMLFormElement).reset();
-    }, 800);
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
