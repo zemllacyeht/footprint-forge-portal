@@ -1,5 +1,6 @@
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles } from "lucide-react";
+import { Check, Megaphone, Mail, Image as ImageIcon, FileText, ShieldCheck, CreditCard, Server, LifeBuoy, RefreshCw, Hammer, Repeat, Lock, Plus, ArrowDown, Sparkles, X, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
 const tiers = [
@@ -80,11 +81,23 @@ const carePlans = [
 ];
 
 export const Pricing = () => {
-  const { addItem, items } = useCart();
+  const { addItem, items, removeItem, clear } = useCart();
   const buildIds = new Set(items.filter((i) => i.category === "Build package").map((i) => i.id));
   const careIds = new Set(items.filter((i) => i.category === "Care plan").map((i) => i.id));
   const hasBuild = buildIds.size > 0;
   const hasCare = careIds.size > 0;
+  const careRef = useRef<HTMLDivElement>(null);
+
+  const handleAddBuild = (id: string, name: string, price: string) => {
+    const wasEmpty = !buildIds.has(id);
+    addItem({ id, name, price, category: "Build package" });
+    if (wasEmpty && !hasCare) {
+      // Wait a tick so the prompt banner mounts before scrolling
+      setTimeout(() => {
+        careRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  };
   return (
     <section id="pricing" className="py-32 relative">
       <div className="container">
