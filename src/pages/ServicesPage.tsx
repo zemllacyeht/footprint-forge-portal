@@ -9,7 +9,7 @@ const ServicesPage = () => {
   return (
     <PageLayout
       title="Services · Build Your Footprint"
-      description="Custom web design, brand identity, hosting, SEO, and ongoing care — everything you need to launch and maintain a digital footprint that grows with your business."
+      description="Custom web design, brand identity, hosting, SEO, and ongoing care: everything you need to launch and maintain a digital footprint that grows with your business."
     >
       <PageHeader
         eyebrow="Services"
@@ -28,7 +28,7 @@ const ServicesPage = () => {
               See how we deliver these services, <span className="italic text-gradient-gold">step by step</span>.
             </h2>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Our process turns scope into a launched site without surprises — full transparency through your private client portal.
+              Our process turns scope into a launched site without surprises, with full transparency through your private client portal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="hero" size="lg" asChild>

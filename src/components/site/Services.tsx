@@ -6,7 +6,7 @@ const services = [
   { icon: Globe, title: "Domain & Hosting", desc: "We handle the technical side: domains, SSL, hosting, and uptime monitoring." },
   { icon: Smartphone, title: "Responsive Builds", desc: "Pixel-perfect on every device, from 4-inch phones to 4K displays." },
   { icon: LineChart, title: "SEO Foundations", desc: "Built-in search optimization so your customers can actually find you." },
-  { icon: Megaphone, title: "Marketing Collateral", desc: "Social graphics, email banners, ads, and print pieces — always on-brand." },
+  { icon: Megaphone, title: "Marketing Collateral", desc: "Social graphics, email banners, ads, and print pieces, always on-brand." },
   { icon: Camera, title: "Content & Photography", desc: "Original photography, video, and copy that bring your brand story to life." },
   { icon: Mail, title: "Email & Automation", desc: "Branded email templates and automations that nurture leads while you sleep." },
   { icon: Shield, title: "Ongoing Care", desc: "Updates, security patches, content edits, all handled every month." },
@@ -23,7 +23,7 @@ export const Services = () => {
           </h2>
           <div className="h-px w-16 bg-gradient-gold mb-6" />
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Nine connected services covering brand, build, and growth — so nothing about your online presence is left to chance.
+            Nine connected services covering brand, build, and growth, so nothing about your online presence is left to chance.
           </p>
         </div>
 

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const faqs = [
   {
     q: "Why split the build fee from the monthly retainer?",
-    a: "Because they're two different relationships. The build is a one-time project with a clear scope and deliverable. Hosting, security, backups, and care are ongoing — billed monthly so you're never surprised by a yearly invoice.",
+    a: "Because they're two different relationships. The build is a one-time project with a clear scope and deliverable. Hosting, security, backups, and care are ongoing, billed monthly so you're never surprised by a yearly invoice.",
   },
   {
     q: "Do I have to take a care plan?",

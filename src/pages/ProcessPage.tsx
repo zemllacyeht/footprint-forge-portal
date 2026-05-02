@@ -9,7 +9,7 @@ const ProcessPage = () => {
   return (
     <PageLayout
       title="Our Process · Build Your Footprint"
-      description="A clear, five-step path from idea to live: discover, design, build, preview in your private hub, and launch — with ongoing care included."
+      description="A clear, five-step path from idea to live: discover, design, build, preview in your private hub, and launch, with ongoing care included."
     >
       <PageHeader
         eyebrow="How we work"

@@ -232,7 +232,7 @@ const Admin = () => {
     setInviting(false);
     if (error) return toast.error(error.message);
     if ((data as any)?.error) return toast.error((data as any).error);
-    toast.success("Client invited — they'll receive an email to set their password");
+    toast.success("Client invited. They'll receive an email to set their password");
     setInviteOpen(false);
     setInvite({
       email: "",
@@ -395,7 +395,7 @@ const Admin = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Project URL (private — embedded in their portal)</Label>
+              <Label>Project URL (private, embedded in their portal)</Label>
               <Input
                 value={draftUrl}
                 onChange={(e) => setDraftUrl(e.target.value)}

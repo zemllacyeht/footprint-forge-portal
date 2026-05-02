@@ -12,7 +12,7 @@ const addons = [
     priceUnit: "/mo",
     icon: Megaphone,
     tagline: "Keep your brand visible everywhere, every month.",
-    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces — designed on-brand and delivered through your client portal.",
+    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces, designed on-brand and delivered through your client portal.",
     features: [
       { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook & LinkedIn" },
       { icon: Mail, t: "Email Campaigns", d: "Branded headers & templates" },
@@ -43,7 +43,7 @@ const addons = [
     priceLabel: "$499",
     priceUnit: "one-time",
     icon: Camera,
-    tagline: "Real photos and real words — built for your launch.",
+    tagline: "Real photos and real words, built for your launch.",
     desc: "A professional photo shoot or full copywriting pass tailored to your business, ready to drop straight into your new site.",
     features: [
       { icon: Camera, t: "Photo Shoot", d: "On-location or product" },
@@ -363,7 +363,7 @@ export const Pricing = () => {
               </div>
               <div className="flex-1">
                 <div className="font-display text-base md:text-lg font-medium leading-tight">
-                  Build package added — now choose a care plan to keep it running.
+                  Build package added. Now choose a care plan to keep it running.
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   Every site needs hosting, security, and backups. Pick a plan below.
