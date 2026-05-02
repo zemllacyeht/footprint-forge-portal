@@ -10,7 +10,7 @@ const WorkPage = () => {
   return (
     <PageLayout
       title="Selected Work · Build Your Footprint"
-      description="A small selection of recent client launches across hospitality, healthcare, retail, and professional services. Every project is custom — no templates, no shortcuts."
+      description="A small selection of recent client launches across hospitality, healthcare, retail, and professional services. Every project is custom, no templates, no shortcuts."
     >
       <PageHeader
         eyebrow="Selected Work"
