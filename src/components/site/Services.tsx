@@ -16,11 +16,15 @@ export const Services = () => {
   return (
     <section id="services" className="py-32 relative">
       <div className="container">
-        <div className="max-w-2xl mb-20">
+        <div className="max-w-2xl mb-16">
           <div className="text-xs uppercase tracking-[0.25em] text-accent mb-4">What we do</div>
-          <h2 className="font-display text-4xl md:text-6xl font-light leading-tight">
-            Everything you need to <span className="italic text-gradient-gold">go live</span>, and stay ahead.
+          <h2 className="font-display text-4xl md:text-5xl font-light leading-tight mb-6">
+            A full studio, <span className="italic text-gradient-gold">under one roof</span>.
           </h2>
+          <div className="h-px w-16 bg-gradient-gold mb-6" />
+          <p className="text-muted-foreground text-lg leading-relaxed">
+            Nine connected services covering brand, build, and growth — so nothing about your online presence is left to chance.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
