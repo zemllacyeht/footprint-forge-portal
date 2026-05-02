@@ -232,7 +232,7 @@ const Admin = () => {
     setInviting(false);
     if (error) return toast.error(error.message);
     if ((data as any)?.error) return toast.error((data as any).error);
-    toast.success("Client invited — they'll receive an email to set their password");
+    toast.success("Client invited. They'll receive an email to set their password");
     setInviteOpen(false);
     setInvite({
       email: "",
