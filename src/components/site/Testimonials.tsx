@@ -22,7 +22,7 @@ const testimonials = [
   },
   {
     quote:
-      "Our brand looks unrecognizable from a year ago — in the best way. The monthly marketing drops keep our socials and emails sharp without us lifting a finger.",
+      "Our brand looks unrecognizable from a year ago, in the best way. The monthly marketing drops keep our socials and emails sharp without us lifting a finger.",
     name: "Jordan Belfield",
     role: "Owner",
     company: "Atlas Athletic Co.",
