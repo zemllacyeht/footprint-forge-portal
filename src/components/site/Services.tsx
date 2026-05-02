@@ -34,6 +34,7 @@ export const Services = () => {
               className="glass glass-hover rounded-2xl p-8 group relative overflow-hidden"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
+              <div className="absolute top-0 left-8 right-8 h-px bg-gradient-gold opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="relative">
                 <div className="h-12 w-12 rounded-lg glass grid place-items-center mb-6 group-hover:bg-gradient-primary group-hover:border-transparent transition-all duration-500">
