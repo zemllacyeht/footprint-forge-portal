@@ -12,7 +12,7 @@ const addons = [
     priceUnit: "/mo",
     icon: Megaphone,
     tagline: "Keep your brand visible everywhere, every month.",
-    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces — designed on-brand and delivered through your client portal.",
+    desc: "Ongoing social posts, email banners, digital ads, one-pagers, and print pieces, designed on-brand and delivered through your client portal.",
     features: [
       { icon: ImageIcon, t: "Social Graphics", d: "Instagram, Facebook & LinkedIn" },
       { icon: Mail, t: "Email Campaigns", d: "Branded headers & templates" },
