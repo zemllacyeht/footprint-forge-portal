@@ -9,7 +9,7 @@ const ServicesPage = () => {
   return (
     <PageLayout
       title="Services · Build Your Footprint"
-      description="Custom web design, brand identity, hosting, SEO, and ongoing care — everything you need to launch and maintain a digital footprint that grows with your business."
+      description="Custom web design, brand identity, hosting, SEO, and ongoing care: everything you need to launch and maintain a digital footprint that grows with your business."
     >
       <PageHeader
         eyebrow="Services"
