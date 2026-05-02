@@ -71,12 +71,12 @@ export const Contact = () => {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
           <div>
-            <div className="text-xs uppercase tracking-[0.25em] text-accent mb-4">Let's talk</div>
-            <h2 className="font-display text-4xl md:text-6xl font-light leading-tight mb-6">
-              Ready to make your <span className="italic text-gradient-gold">mark</span>?
+            <div className="text-xs uppercase tracking-[0.25em] text-accent mb-4">Get in touch</div>
+            <h2 className="font-display text-4xl md:text-5xl font-light leading-tight mb-6">
+              Let's build something <span className="italic text-gradient-gold">together</span>.
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-12">
-              Tell us about your business. We'll reply within one business day with a free strategy call invitation.
+              Share a few details about your project and we'll be in touch shortly to set up your free strategy call.
             </p>
 
             <div className="space-y-6">
