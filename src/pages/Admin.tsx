@@ -395,7 +395,7 @@ const Admin = () => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Project URL (private — embedded in their portal)</Label>
+              <Label>Project URL (private, embedded in their portal)</Label>
               <Input
                 value={draftUrl}
                 onChange={(e) => setDraftUrl(e.target.value)}
