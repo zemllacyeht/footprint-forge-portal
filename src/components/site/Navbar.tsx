@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
-import logoMark from "@/assets/logo-mark-dark.png";
 
 const links = [
   { href: "/", label: "Home" },
@@ -31,12 +30,10 @@ export const Navbar = () => {
       }`}
     >
       <nav className="container flex items-center justify-between">
-        <a href="/" className="flex items-center gap-3 group">
-          <img
-            src={logoMark}
-            alt="Build Your Footprint"
-            className="h-11 w-11 object-contain transition-transform duration-500 group-hover:scale-105"
-          />
+        <a href="/" className="flex items-center gap-2 group">
+          <div className="h-9 w-9 rounded-lg bg-gradient-primary grid place-items-center shadow-glow">
+            <span className="font-display font-bold text-primary-foreground text-lg">F</span>
+          </div>
           <div className="leading-tight">
             <div className="font-display text-base font-semibold tracking-tight">
               Build Your <span className="text-gradient-gold">Footprint</span>
