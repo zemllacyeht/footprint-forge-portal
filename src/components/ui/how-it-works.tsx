@@ -144,45 +144,66 @@ interface TrailDot {
   x: number;
   y: number;
   iconIndex: number;
+  born: number;
 }
 
-const CursorTrail: React.FC<{ active: boolean }> = ({ active }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const TRAIL_LIFE = 850;
+const TRAIL_THROTTLE = 60;
+const TRAIL_MAX = 10;
+
+const CursorTrail: React.FC<{ targetRef: React.RefObject<HTMLElement> }> = ({ targetRef }) => {
+  const layerRef = useRef<HTMLDivElement>(null);
   const [dots, setDots] = useState<TrailDot[]>([]);
   const idRef = useRef(0);
   const lastEmit = useRef(0);
   const iconCursor = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!active) {
-      setDots([]);
-      return;
-    }
-    const el = containerRef.current;
+    const el = targetRef.current;
     if (!el) return;
+    // Skip on coarse pointers (touch). Saves listeners and renders entirely.
+    if (typeof window !== "undefined" && window.matchMedia?.("(hover: none)").matches) return;
 
-    const handleMove = (e: MouseEvent) => {
+    const handleMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
       const now = performance.now();
-      if (now - lastEmit.current < 55) return;
+      if (now - lastEmit.current < TRAIL_THROTTLE) return;
       lastEmit.current = now;
       const rect = el.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
       const id = ++idRef.current;
       const iconIndex = iconCursor.current++ % trailIcons.length;
-      setDots((prev) => [...prev.slice(-10), { id, x, y, iconIndex }]);
-      window.setTimeout(() => {
-        setDots((prev) => prev.filter((d) => d.id !== id));
-      }, 900);
+      setDots((prev) => {
+        const next = prev.length >= TRAIL_MAX ? prev.slice(prev.length - TRAIL_MAX + 1) : prev;
+        return [...next, { id, x, y, iconIndex, born: now }];
+      });
     };
 
-    el.addEventListener("mousemove", handleMove);
-    return () => el.removeEventListener("mousemove", handleMove);
-  }, [active]);
+    // Single rAF sweep prunes expired dots, instead of N setTimeouts triggering N setStates.
+    const tick = () => {
+      const now = performance.now();
+      setDots((prev) => {
+        if (prev.length === 0) return prev;
+        const filtered = prev.filter((d) => now - d.born < TRAIL_LIFE);
+        return filtered.length === prev.length ? prev : filtered;
+      });
+      rafRef.current = window.requestAnimationFrame(tick);
+    };
+    rafRef.current = window.requestAnimationFrame(tick);
+
+    el.addEventListener("pointermove", handleMove, { passive: true });
+    return () => {
+      el.removeEventListener("pointermove", handleMove);
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [targetRef]);
 
   return (
     <div
-      ref={containerRef}
+      ref={layerRef}
       className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden
     >
@@ -191,7 +212,10 @@ const CursorTrail: React.FC<{ active: boolean }> = ({ active }) => {
         return (
           <span
             key={d.id}
-            className={cn("absolute -translate-x-1/2 -translate-y-1/2 animate-trail", color)}
+            className={cn(
+              "absolute -translate-x-1/2 -translate-y-1/2 animate-trail will-change-transform",
+              color
+            )}
             style={{ left: d.x, top: d.y }}
           >
             <Icon className="h-4 w-4" strokeWidth={1.75} />
@@ -205,12 +229,11 @@ const CursorTrail: React.FC<{ active: boolean }> = ({ active }) => {
 interface VerticalTabProps {
   step: Step;
   index: number;
-  total: number;
   isActive: boolean;
   onActivate: () => void;
 }
 
-const VerticalTab: React.FC<VerticalTabProps> = ({ step, index, total, isActive, onActivate }) => (
+const VerticalTab: React.FC<VerticalTabProps> = ({ step, index, isActive, onActivate }) => (
   <button
     onMouseEnter={onActivate}
     onFocus={onActivate}
@@ -244,6 +267,30 @@ const VerticalTab: React.FC<VerticalTabProps> = ({ step, index, total, isActive,
         isActive ? cn(step.tabTextClass, "translate-y-0 opacity-100") : "text-muted-foreground/50 opacity-60"
       )}
     />
+  </button>
+);
+
+interface PillTabProps {
+  step: Step;
+  index: number;
+  isActive: boolean;
+  onActivate: () => void;
+}
+
+const PillTab: React.FC<PillTabProps> = ({ step, index, isActive, onActivate }) => (
+  <button
+    onClick={onActivate}
+    aria-label={`Step ${index + 1}: ${step.title}`}
+    aria-pressed={isActive}
+    className={cn(
+      "snap-start shrink-0 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors",
+      isActive
+        ? cn(step.tabClass, step.tabTextClass, "border-transparent")
+        : "border-border bg-card/40 text-foreground/80 active:bg-card/70"
+    )}
+  >
+    <span className="font-mono text-[10px] tracking-[0.2em] opacity-70">0{index + 1}</span>
+    <span className="font-display tracking-wide">{step.title}</span>
   </button>
 );
 
