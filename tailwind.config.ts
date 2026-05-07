@@ -75,10 +75,16 @@ export default {
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
+        "trail": {
+          "0%": { opacity: "0", transform: "translate(-50%, -50%) scale(0.4) rotate(0deg)" },
+          "30%": { opacity: "1", transform: "translate(-50%, -60%) scale(1) rotate(15deg)" },
+          "100%": { opacity: "0", transform: "translate(-50%, -120%) scale(0.6) rotate(45deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "trail": "trail 0.9s ease-out forwards",
       },
     },
   },
