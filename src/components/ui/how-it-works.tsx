@@ -429,7 +429,6 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ className, ...props }) =
           </div>
         </div>
       </div>
-      </div>
 
       <Dialog open={openDetails} onOpenChange={setOpenDetails}>
         <DialogContent className="max-w-2xl">
