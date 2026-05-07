@@ -18,14 +18,17 @@ const schema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, role, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate("/portal", { replace: true });
-  }, [user, loading, navigate]);
+    if (loading || !user) return;
+    // Wait for role to resolve so admins land in the right place
+    if (role === null) return;
+    navigate(role === "admin" ? "/admin" : "/portal", { replace: true });
+  }, [user, role, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
