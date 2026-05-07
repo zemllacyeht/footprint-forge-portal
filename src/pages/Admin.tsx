@@ -309,9 +309,9 @@ const Admin = () => {
               ) : (
                 rows.map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell className="font-medium">{row.company_name ?? "—"}</TableCell>
-                    <TableCell>{row.contact_name ?? "—"}</TableCell>
-                    <TableCell className="text-muted-foreground">{row.email ?? "—"}</TableCell>
+                    <TableCell className="font-medium">{row.company_name ?? "Not set"}</TableCell>
+                    <TableCell>{row.contact_name ?? "Not set"}</TableCell>
+                    <TableCell className="text-muted-foreground">{row.email ?? "Not set"}</TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="capitalize">
                         {row.project_status}
