@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 const services: Service[] = [
   {
     number: "001",
+    tag: "Brand",
     title: "Brand Identity",
     description: "Logo systems, color palettes, and visual languages that make you unmistakable.",
     icon: Palette,
@@ -31,6 +32,7 @@ const services: Service[] = [
   },
   {
     number: "002",
+    tag: "Web",
     title: "Custom Web Design",
     description: "Hand-crafted, conversion-focused websites built around your business goals.",
     icon: Code2,
@@ -43,6 +45,7 @@ const services: Service[] = [
   },
   {
     number: "003",
+    tag: "Infrastructure",
     title: "Domain & Hosting",
     description: "We handle the technical side: domains, SSL, hosting, and uptime monitoring.",
     icon: Globe,
@@ -55,6 +58,7 @@ const services: Service[] = [
   },
   {
     number: "004",
+    tag: "Devices",
     title: "Responsive Builds",
     description: "Pixel-perfect on every device, from 4-inch phones to 4K displays.",
     icon: Smartphone,
@@ -67,6 +71,7 @@ const services: Service[] = [
   },
   {
     number: "005",
+    tag: "Search",
     title: "SEO Foundations",
     description: "Built-in search optimization so your customers can actually find you.",
     icon: LineChart,
@@ -79,6 +84,7 @@ const services: Service[] = [
   },
   {
     number: "006",
+    tag: "Marketing",
     title: "Marketing Collateral",
     description: "Social graphics, email banners, ads, and print pieces, always on-brand.",
     icon: Megaphone,
@@ -91,6 +97,7 @@ const services: Service[] = [
   },
   {
     number: "007",
+    tag: "Content",
     title: "Content & Photography",
     description: "Original photography, video, and copy that bring your brand story to life.",
     icon: Camera,
@@ -103,6 +110,7 @@ const services: Service[] = [
   },
   {
     number: "008",
+    tag: "Lifecycle",
     title: "Email & Automation",
     description: "Branded email templates and automations that nurture leads while you sleep.",
     icon: Mail,
@@ -115,6 +123,7 @@ const services: Service[] = [
   },
   {
     number: "009",
+    tag: "Maintenance",
     title: "Ongoing Care",
     description: "Updates, security patches, content edits, all handled every month.",
     icon: Shield,
