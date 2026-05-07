@@ -204,15 +204,15 @@ export const PlanFinderWizard = () => {
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   className="p-6 md:p-10"
                 >
-                  <h2 className="font-display text-2xl md:text-4xl font-light leading-tight mb-2">
+                  <h2 className="font-display text-2xl md:text-4xl font-light leading-tight mb-6">
                     {step.title}
                     <span className="text-accent">.</span>
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-8">
-                    {step.id === "marketing"
-                      ? "Pick anything you want help with. You can always change later."
-                      : "Pick the option that fits best."}
-                  </p>
+                  {step.id === "marketing" && (
+                    <p className="text-sm text-muted-foreground -mt-3 mb-6">
+                      Select any that apply.
+                    </p>
+                  )}
 
                   {/* Step body */}
                   {step.id === "site" && (
