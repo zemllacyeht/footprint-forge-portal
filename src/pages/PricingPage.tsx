@@ -1,5 +1,5 @@
 import { PageLayout } from "@/components/site/PageLayout";
-import { PageHeader } from "@/components/site/PageHeader";
+
 import { Pricing } from "@/components/site/Pricing";
 import { PlanFinderWizard } from "@/components/site/PlanFinderWizard";
 import { Button } from "@/components/ui/button";
