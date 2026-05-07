@@ -149,21 +149,8 @@ const ServicesPage = () => {
         description="From the first sketch to the monthly invoice, we handle the full stack of design, development, and care so you can focus on running your business."
       />
 
-      <section id="services" className="py-24 md:py-32 relative">
+      <section id="services" className="pb-24 md:pb-32 relative">
         <div className="container">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
-            <div className="max-w-2xl">
-              <div className="text-xs uppercase tracking-[0.25em] text-accent mb-4">What we do</div>
-              <h2 className="font-display text-4xl md:text-5xl font-light leading-tight mb-6">
-                A full studio, <span className="italic text-gradient-gold">under one roof</span>.
-              </h2>
-              <div className="h-px w-16 bg-gradient-gold mb-6" />
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Nine connected services covering brand, build, and growth, so nothing about your online presence is left to chance.
-              </p>
-            </div>
-          </div>
-
           <ServiceCarousel services={services} />
         </div>
       </section>
