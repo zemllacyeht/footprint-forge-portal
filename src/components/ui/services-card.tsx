@@ -77,7 +77,7 @@ const ServiceCard = ({
 
       <div className="relative flex items-start justify-between mb-12">
         <span className="text-xs uppercase tracking-[0.25em] text-accent">
-          ( {service.number} )
+          {service.tag ?? "Service"}
         </span>
         <div
           className={cn(
