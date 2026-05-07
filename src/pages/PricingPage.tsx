@@ -1,7 +1,14 @@
 import { PageLayout } from "@/components/site/PageLayout";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Pricing } from "@/components/site/Pricing";
+import { PlanFinderWizard } from "@/components/site/PlanFinderWizard";
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { ArrowRight, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -28,16 +35,43 @@ const PricingPage = () => {
   return (
     <PageLayout
       title="Pricing · Build Your Footprint"
-      description="Transparent two-part pricing: a one-time build fee plus a simple monthly retainer for hosting, domain, and care. Two invoices, zero surprises."
+      description="Answer a few questions to get a tailored plan, then send it straight to your cart. Transparent two part pricing with a one time build fee plus a simple monthly retainer."
     >
       <PageHeader
         eyebrow="Investment"
         breadcrumb="Pricing"
-        title={<>Two parts, <span className="italic text-gradient-gold">clearly separated</span>.</>}
-        description="A one-time build fee to launch your site, plus a simple monthly retainer for hosting, domain, and care. Two invoices, two relationships, zero surprises."
+        title={<>Find the <span className="italic text-gradient-gold">right plan</span> in 60 seconds.</>}
+        description="Answer five quick questions and we will recommend a build package, care plan, and the add-ons that match your goals. Send it to your cart, or browse every package below."
       />
 
-      <Pricing />
+      <PlanFinderWizard />
+
+      {/* Browse all packages, opt in */}
+      <section className="py-16 relative">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <Accordion type="single" collapsible className="rounded-2xl border border-border bg-card/30 backdrop-blur">
+              <AccordionItem value="all" className="border-b-0">
+                <AccordionTrigger className="px-6 md:px-8 py-5 hover:no-underline">
+                  <div className="text-left">
+                    <div className="text-xs uppercase tracking-[0.25em] text-accent mb-1">
+                      Prefer to browse
+                    </div>
+                    <div className="font-display text-xl md:text-2xl font-light">
+                      See every build package, care plan, and add-on
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0">
+                  <div className="-mt-8">
+                    <Pricing />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </div>
+      </section>
 
       <section className="py-24 relative">
         <div className="container">
