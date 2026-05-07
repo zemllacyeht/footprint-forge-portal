@@ -1,6 +1,6 @@
 import { PageLayout } from "@/components/site/PageLayout";
 import { PageHeader } from "@/components/site/PageHeader";
-import { Process } from "@/components/site/Process";
+import { HowItWorks } from "@/components/ui/how-it-works";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -18,7 +18,7 @@ const ProcessPage = () => {
         description="No mystery, no waiting in the dark. Every project follows the same five steps, with previews and approvals happening inside your secure client portal."
       />
 
-      <Process />
+      <HowItWorks />
 
       <section className="py-24 relative">
         <div className="container">
