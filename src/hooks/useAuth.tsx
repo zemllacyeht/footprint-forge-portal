@@ -37,9 +37,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const { data } = await supabase
             .from("user_roles")
             .select("role")
-            .eq("user_id", s.user.id)
-            .maybeSingle();
-          setRole((data?.role as Role) ?? "client");
+            .eq("user_id", s.user.id);
+          const roles = (data ?? []).map((r) => r.role as Role);
+          // Admin wins if the user has multiple role rows
+          setRole(roles.includes("admin") ? "admin" : roles[0] ?? "client");
         }, 0);
       } else {
         setRole(null);
