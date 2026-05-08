@@ -43,6 +43,14 @@ export const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-2">
+          <Button
+            variant="gold"
+            size="sm"
+            asChild
+            className="mr-2 shadow-glow ring-1 ring-primary/40 font-semibold tracking-wide"
+          >
+            <a href="/login">Client Login</a>
+          </Button>
           {links.map((l) => (
             <Button key={l.href} variant="glass" size="sm" asChild>
               <a href={l.href}>{l.label}</a>
@@ -63,9 +71,6 @@ export const Navbar = () => {
               </span>
             )}
           </button>
-          <Button variant="gold" size="sm" asChild>
-            <a href="/login">Client Login</a>
-          </Button>
           <Button variant="hero" size="sm" asChild>
             <a href="/contact">Start a Project</a>
           </Button>
