@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import midasTouchShot from "@/assets/work-midas-touch.png";
+import midasTouchShot from "@/assets/work-midas-touch.jpg";
 
 type Project = {
   title: string;
