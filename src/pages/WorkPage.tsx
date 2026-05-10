@@ -20,7 +20,7 @@ const WorkPage = () => {
       />
 
       <Work />
-      <Testimonials />
+      <ClientStories />
 
       <section className="py-24 relative">
         <div className="container">
