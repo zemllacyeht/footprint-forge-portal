@@ -55,6 +55,54 @@ export type Database = {
           },
         ]
       }
+      client_invoices: {
+        Row: {
+          amount_cents: number
+          client_id: string
+          created_at: string
+          currency: string
+          description: string | null
+          due_at: string | null
+          external_url: string | null
+          id: string
+          invoice_number: string
+          issued_at: string
+          paid_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          client_id: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          due_at?: string | null
+          external_url?: string | null
+          id?: string
+          invoice_number: string
+          issued_at?: string
+          paid_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          client_id?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          due_at?: string | null
+          external_url?: string | null
+          id?: string
+          invoice_number?: string
+          issued_at?: string
+          paid_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       client_messages: {
         Row: {
           client_id: string
