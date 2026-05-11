@@ -519,19 +519,26 @@ Deno.serve(async (req) => {
     })).catch(() => ({ ok: false, text: "" }));
 
     let perfUnavailableReason: string | null = null;
+    console.log("PSI API KEY present:", !!apiKey);
     if (!apiKey) {
-      perfUnavailableReason = "Performance data unavailable, API key not configured";
+      perfUnavailableReason = "Performance API key not configured, contact site admin";
       console.error("[analyze-website] PAGESPEED_API_KEY missing");
     }
 
+    const psiUrl = apiKey
+      ? `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&key=${apiKey}`
+      : "";
+    console.log("PSI URL:", psiUrl ? psiUrl.replace(apiKey!, "***") : "(no key)");
+
     const psiPromise: Promise<any> = apiKey
-      ? fetchWithTimeout(
-          `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
-            url,
-          )}&strategy=mobile&category=performance&key=${apiKey}`,
-        )
+      ? fetchWithTimeout(psiUrl, {}, 28000)
           .then(async (r) => {
-            if (r.ok) return await r.json();
+            console.log("PSI response status:", r.status);
+            if (r.ok) {
+              const data = await r.json();
+              console.log("PSI data keys:", Object.keys(data));
+              return data;
+            }
             const body = await r.text().catch(() => "");
             console.error("[analyze-website] PSI HTTP", r.status, body.slice(0, 500));
             perfUnavailableReason = `Performance data unavailable, PageSpeed API returned ${r.status}`;
@@ -539,7 +546,7 @@ Deno.serve(async (req) => {
           })
           .catch((e) => {
             console.error("[analyze-website] PSI fetch failed", String(e));
-            perfUnavailableReason = "Performance data unavailable, PageSpeed request failed";
+            perfUnavailableReason = "Performance data unavailable, PageSpeed request timed out";
             return null;
           })
       : Promise.resolve(null);
