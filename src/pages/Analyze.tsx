@@ -222,22 +222,25 @@ const Analyze = () => {
 
           {/* Results */}
           {base && !loading && (
-            <div className="animate-fade-up" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-              <section className="max-w-2xl mx-auto rounded-3xl border border-border bg-card/40 p-8 md:p-12 text-center">
-                <div className="flex justify-center mb-6">
-                  <div className="w-full max-w-[280px] md:max-w-none">
+            <div className="animate-fade-up" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <section
+                className="max-w-2xl mx-auto rounded-3xl border border-border bg-card/40 px-6 sm:px-10 text-center flex flex-col items-center"
+                style={{ paddingTop: "48px", paddingBottom: "48px" }}
+              >
+                <div className="flex justify-center mb-6 w-full">
+                  <div className="w-full max-w-[280px] md:max-w-none mx-auto">
                     <ScoreGauge score={mergedOverall} />
                   </div>
                 </div>
-                <div className="font-display mb-2" style={{ fontSize: "1.4rem" }}>{grade(mergedOverall)}</div>
-                <p className="text-muted-foreground max-w-md mx-auto">{summary(mergedOverall)}</p>
+                <div className="font-display mb-2 text-center" style={{ fontSize: "1.4rem" }}>{grade(mergedOverall)}</div>
+                <p className="text-muted-foreground max-w-md mx-auto text-center">{summary(mergedOverall)}</p>
                 {speed.status === "loading" && (
-                  <p className="text-xs text-muted-foreground mt-3">
+                  <p className="text-xs text-muted-foreground mt-3 text-center">
                     Score based on 3 of 4 categories{" "}
                     <span className="animate-pulse">(speed analysis in progress...)</span>
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground/70 mt-4">
+                <p className="text-xs text-muted-foreground/70 mt-4 text-center">
                   Analyzed: <span className="text-foreground/70">{base.domain}</span>
                 </p>
               </section>

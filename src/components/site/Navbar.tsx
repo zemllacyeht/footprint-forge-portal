@@ -26,7 +26,7 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500 ${
         scrolled ? "py-3 backdrop-blur-xl bg-background/70 border-b border-border" : "py-5"
       }`}
     >
