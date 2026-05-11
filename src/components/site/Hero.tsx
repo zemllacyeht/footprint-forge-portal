@@ -66,11 +66,11 @@ export const Hero = () => {
             decoding="async"
             // @ts-expect-error fetchpriority is a valid HTML attribute
             fetchpriority="high"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-70"
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/20" />
       </div>
 
       {/* Infinite Grid Overlay */}
@@ -116,7 +116,7 @@ export const Hero = () => {
             <Button variant="hero" size="xl" asChild>
               <a href="/analyze">Get a Free Site Audit</a>
             </Button>
-            <Button variant="glass" size="xl" asChild>
+            <Button variant="gold" size="xl" asChild>
               <a href="/contact">
                 Start a Project <ArrowRight className="h-5 w-5" />
               </a>
