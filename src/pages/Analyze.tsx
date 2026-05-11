@@ -242,7 +242,7 @@ const Analyze = () => {
                 </p>
               </section>
 
-              <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-6">
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 <CategoryCard
                   icon="🔍"
                   title="Google Findability"
