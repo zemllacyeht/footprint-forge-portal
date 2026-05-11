@@ -472,8 +472,14 @@ export const ClientStories = () => {
                             aspectRatio: "9 / 16",
                             maxWidth: "min(100%, 42vh)",
                           }}
-                          onMouseEnter={() => handleVideoEnter(i)}
-                          onMouseLeave={() => handleVideoLeave(i)}
+                          onMouseEnter={() => {
+                            handleVideoEnter(i);
+                            if (i === active) setCardHover(true);
+                          }}
+                          onMouseLeave={() => {
+                            handleVideoLeave(i);
+                            if (i === active) setCardHover(false);
+                          }}
                         >
                           <div
                             className="relative w-full h-full rounded-[2px] overflow-hidden"
@@ -491,9 +497,9 @@ export const ClientStories = () => {
                               poster={s.poster}
                               muted
                               playsInline
-                              loop
                               preload={preload}
                               onTimeUpdate={() => onTimeUpdate(i)}
+                              onEnded={() => onVideoEnded(i)}
                               aria-label={`${s.client}, ${s.business}: ${s.quote}`}
                               className="absolute inset-0 w-full h-full object-cover"
                               style={{
