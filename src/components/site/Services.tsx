@@ -226,7 +226,7 @@ export const Services = () => {
                         }`}
                       >
                         <div className="overflow-hidden">
-                          <div className="ml-13 pl-13 border-l border-accent/30 pl-5 ml-[3.25rem] space-y-4">
+                          <div className="ml-[3.25rem] border-l border-accent/30 pl-5 space-y-4">
                             <p className="text-sm leading-relaxed text-foreground/80">
                               {s.details}
                             </p>
