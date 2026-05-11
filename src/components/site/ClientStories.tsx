@@ -5,6 +5,7 @@ type Metric = { value: string; label: string };
 type Story = {
   id: string;
   videoSrc?: string;
+  captionsSrc?: string;
   poster?: string;
   client: string;
   business: string;
