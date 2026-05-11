@@ -599,6 +599,7 @@ Deno.serve(async (req) => {
             checks: perf.checks,
             vitals: perf.vitals,
             unavailable: perfScore === null,
+            unavailableReason: perfScore === null ? (perfUnavailableReason || "Performance data unavailable") : null,
           },
           aiVisibility: { score: aiScore, max: 25, checks: aiChecks },
           security: { score: secScore, max: 25, checks: securityChecks },
