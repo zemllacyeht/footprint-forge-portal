@@ -141,6 +141,17 @@ export const ClientStories = () => {
     setProgress(0);
   }, [active]);
 
+  // sync caption track mode with toggle
+  useEffect(() => {
+    videoRefs.current.forEach((v) => {
+      if (!v) return;
+      const tracks = v.textTracks;
+      for (let t = 0; t < tracks.length; t++) {
+        tracks[t].mode = captionsOn ? "showing" : "hidden";
+      }
+    });
+  }, [captionsOn, active]);
+
   // keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
