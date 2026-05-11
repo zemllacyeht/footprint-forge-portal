@@ -89,6 +89,7 @@ export const ClientStories = () => {
   const [showHint, setShowHint] = useState(true);
   const [progress, setProgress] = useState(0);
   const [hovering, setHovering] = useState(false);
+  const [cardHover, setCardHover] = useState(false);
   const [optedIn, setOptedIn] = useState<Record<number, boolean>>({});
   const [magnet, setMagnet] = useState<{ prev: { x: number; y: number }; next: { x: number; y: number } }>({
     prev: { x: 0, y: 0 },
@@ -101,6 +102,14 @@ export const ClientStories = () => {
   const dragStart = useRef<number | null>(null);
   const userInteracted = useRef(false);
   const volumeFadeRef = useRef<number | null>(null);
+  const advanceTimerRef = useRef<number | null>(null);
+
+  const clearAdvanceTimer = useCallback(() => {
+    if (advanceTimerRef.current) {
+      window.clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+  }, []);
 
   // reduced motion + reduced data
   useEffect(() => {
@@ -146,6 +155,7 @@ export const ClientStories = () => {
   }, []);
 
   const goTo = useCallback((i: number) => {
+    clearAdvanceTimer();
     setActive((prev) => {
       const next = (i + STORIES.length) % STORIES.length;
       if (next !== prev) {
@@ -157,7 +167,7 @@ export const ClientStories = () => {
       }
       return next;
     });
-  }, []);
+  }, [clearAdvanceTimer]);
 
   const next = useCallback(() => goTo(active + 1), [active, goTo]);
   const prev = useCallback(() => goTo(active - 1), [active, goTo]);
@@ -237,13 +247,28 @@ export const ClientStories = () => {
     if (i !== active) return;
     const v = videoRefs.current[i];
     if (v && v.duration) {
-      const p = (v.currentTime / v.duration) * 100;
-      setProgress(p);
-      if (p >= 99.5 && !reduced && !hovering && !userInteracted.current) {
-        next();
-      }
+      setProgress((v.currentTime / v.duration) * 100);
     }
   };
+
+  const onVideoEnded = (i: number) => {
+    if (i !== active) return;
+    setProgress(100);
+    if (reduced || cardHover) return;
+    clearAdvanceTimer();
+    advanceTimerRef.current = window.setTimeout(() => {
+      advanceTimerRef.current = null;
+      next();
+    }, 1500);
+  };
+
+  // pause auto-advance while hovering active card
+  useEffect(() => {
+    if (cardHover) clearAdvanceTimer();
+  }, [cardHover, clearAdvanceTimer]);
+
+  // cleanup on unmount
+  useEffect(() => clearAdvanceTimer, [clearAdvanceTimer]);
 
   // drag
   const onPointerDown = (e: React.PointerEvent) => { dragStart.current = e.clientX; };
@@ -447,8 +472,14 @@ export const ClientStories = () => {
                             aspectRatio: "9 / 16",
                             maxWidth: "min(100%, 42vh)",
                           }}
-                          onMouseEnter={() => handleVideoEnter(i)}
-                          onMouseLeave={() => handleVideoLeave(i)}
+                          onMouseEnter={() => {
+                            handleVideoEnter(i);
+                            if (i === active) setCardHover(true);
+                          }}
+                          onMouseLeave={() => {
+                            handleVideoLeave(i);
+                            if (i === active) setCardHover(false);
+                          }}
                         >
                           <div
                             className="relative w-full h-full rounded-[2px] overflow-hidden"
@@ -466,9 +497,9 @@ export const ClientStories = () => {
                               poster={s.poster}
                               muted
                               playsInline
-                              loop
                               preload={preload}
                               onTimeUpdate={() => onTimeUpdate(i)}
+                              onEnded={() => onVideoEnded(i)}
                               aria-label={`${s.client}, ${s.business}: ${s.quote}`}
                               className="absolute inset-0 w-full h-full object-cover"
                               style={{
