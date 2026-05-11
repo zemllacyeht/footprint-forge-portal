@@ -1,0 +1,112 @@
+// Shared Build Your Footprint email brand styles.
+// Mirrors site palette: dark emerald card, gold accent, Fraunces + Inter.
+
+export const brand = {
+  main: {
+    backgroundColor: '#ffffff',
+    fontFamily: "'Inter', Arial, sans-serif",
+    margin: 0,
+    padding: 0,
+    WebkitFontSmoothing: 'antialiased',
+  },
+  outerContainer: {
+    maxWidth: '560px',
+    margin: '0 auto',
+    padding: '40px 20px',
+  },
+  brandRow: {
+    textAlign: 'center' as const,
+    marginBottom: '20px',
+  },
+  brandMark: {
+    fontFamily: "'Fraunces', Georgia, serif",
+    fontSize: '13px',
+    fontWeight: 500 as const,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const,
+    color: '#0a1410',
+    margin: 0,
+  },
+  card: {
+    backgroundColor: '#0f1d18',
+    borderRadius: '14px',
+    padding: '40px 36px',
+    border: '1px solid #1a2e26',
+  },
+  h1: {
+    fontFamily: "'Fraunces', Georgia, serif",
+    fontSize: '28px',
+    fontWeight: 600 as const,
+    letterSpacing: '-0.02em',
+    lineHeight: '1.25',
+    color: '#f5efe2',
+    margin: '0 0 18px',
+  },
+  text: {
+    fontFamily: "'Inter', Arial, sans-serif",
+    fontSize: '15px',
+    lineHeight: '1.65',
+    color: '#c8d3ce',
+    margin: '0 0 26px',
+  },
+  buttonWrapper: {
+    textAlign: 'center' as const,
+    margin: '8px 0 28px',
+  },
+  button: {
+    backgroundColor: '#1ea672',
+    color: '#0a1410',
+    fontFamily: "'Inter', Arial, sans-serif",
+    fontSize: '15px',
+    fontWeight: 600 as const,
+    letterSpacing: '0.01em',
+    borderRadius: '10px',
+    padding: '15px 32px',
+    textDecoration: 'none',
+    display: 'inline-block',
+  },
+  smallNote: {
+    fontFamily: "'Inter', Arial, sans-serif",
+    fontSize: '12px',
+    lineHeight: '1.6',
+    color: '#7d8a85',
+    margin: '0 0 24px',
+    wordBreak: 'break-all' as const,
+  },
+  inlineLink: {
+    color: '#e8c878',
+    textDecoration: 'none',
+  },
+  footer: {
+    fontFamily: "'Inter', Arial, sans-serif",
+    fontSize: '12px',
+    lineHeight: '1.55',
+    color: '#7d8a85',
+    margin: '24px 0 0',
+    paddingTop: '20px',
+    borderTop: '1px solid #1a2e26',
+  },
+  signOff: {
+    fontFamily: "'Inter', Arial, sans-serif",
+    fontSize: '11px',
+    lineHeight: '1.6',
+    color: '#5f6c67',
+    textAlign: 'center' as const,
+    margin: '24px 0 0',
+  },
+  signOffLink: {
+    color: '#7d8a85',
+    textDecoration: 'none',
+  },
+  code: {
+    fontFamily: "'Fraunces', Georgia, serif",
+    fontSize: '32px',
+    fontWeight: 600 as const,
+    letterSpacing: '0.32em',
+    color: '#e8c878',
+    textAlign: 'center' as const,
+    margin: '0 0 28px',
+  },
+  fontsHref:
+    'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap',
+}
