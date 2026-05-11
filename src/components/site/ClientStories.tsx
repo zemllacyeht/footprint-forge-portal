@@ -5,6 +5,7 @@ type Metric = { value: string; label: string };
 type Story = {
   id: string;
   videoSrc?: string;
+  captionsSrc?: string;
   poster?: string;
   client: string;
   business: string;
@@ -18,6 +19,7 @@ const STORIES: Story[] = [
   {
     id: "01",
     videoSrc: "/videos/byf-01.mp4",
+    captionsSrc: "/captions/byf-01.vtt",
     client: "Maya Chen",
     business: "Founder, Cloth & Verse Studio",
     quote:
@@ -33,6 +35,7 @@ const STORIES: Story[] = [
   {
     id: "02",
     videoSrc: "/videos/byf-02.mp4",
+    captionsSrc: "/captions/byf-02.vtt",
     client: "Marcus Reid",
     business: "CEO, Reid & Sons Construction",
     quote:
@@ -47,6 +50,7 @@ const STORIES: Story[] = [
   {
     id: "03",
     videoSrc: "/videos/byf-03.mp4",
+    captionsSrc: "/captions/byf-03.vtt",
     client: "Aisha Okonkwo",
     business: "Founder, Lumen Wellness",
     quote:
@@ -84,6 +88,7 @@ export const ClientStories = () => {
   const [showHint, setShowHint] = useState(true);
   const [progress, setProgress] = useState(0);
   const [hovering, setHovering] = useState(false);
+  const [captionsOn, setCaptionsOn] = useState(true);
   const sectionRef = useRef<HTMLElement | null>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const dragStart = useRef<number | null>(null);
@@ -135,6 +140,17 @@ export const ClientStories = () => {
     }
     setProgress(0);
   }, [active]);
+
+  // sync caption track mode with toggle
+  useEffect(() => {
+    videoRefs.current.forEach((v) => {
+      if (!v) return;
+      const tracks = v.textTracks;
+      for (let t = 0; t < tracks.length; t++) {
+        tracks[t].mode = captionsOn ? "showing" : "hidden";
+      }
+    });
+  }, [captionsOn, active]);
 
   // keyboard
   useEffect(() => {
@@ -336,20 +352,31 @@ export const ClientStories = () => {
                             <video
                               ref={(el) => (videoRefs.current[i] = el)}
                               data-video-id={s.id}
-                              src={s.videoSrc}
                               poster={s.poster}
                               muted
                               playsInline
                               loop
                               preload={isActive ? "metadata" : "none"}
                               onTimeUpdate={() => onTimeUpdate(i)}
+                              crossOrigin="anonymous"
                               aria-label={`${s.client}, ${s.business}: ${s.quote}`}
                               className="absolute inset-0 w-full h-full object-cover"
                               style={{
                                 background:
                                   "radial-gradient(60% 50% at 50% 40%, rgba(212,165,116,0.18), #0a0a0b 70%)",
                               }}
-                            />
+                            >
+                              {s.videoSrc && <source src={s.videoSrc} type="video/mp4" />}
+                              {s.captionsSrc && (
+                                <track
+                                  kind="captions"
+                                  src={s.captionsSrc}
+                                  srcLang="en"
+                                  label="English"
+                                  default
+                                />
+                              )}
+                            </video>
                             {/* number chip */}
                             <div
                               className="absolute top-3 left-3 px-2 py-1 text-[10px]"
@@ -363,6 +390,31 @@ export const ClientStories = () => {
                             >
                               [{s.id}]
                             </div>
+
+                            {/* CC toggle */}
+                            {isActive && s.captionsSrc && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCaptionsOn((v) => !v);
+                                }}
+                                aria-pressed={captionsOn}
+                                aria-label={captionsOn ? "Hide captions" : "Show captions"}
+                                className="absolute top-3 right-3 px-2 py-1 text-[10px] uppercase"
+                                style={{
+                                  fontFamily: "'JetBrains Mono', monospace",
+                                  letterSpacing: "0.18em",
+                                  color: captionsOn ? "#0a0a0b" : "#e8c89a",
+                                  background: captionsOn ? "#d4a574" : "rgba(10,10,11,0.6)",
+                                  backdropFilter: "blur(6px)",
+                                  border: "1px solid rgba(212,165,116,0.4)",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                CC
+                              </button>
+                            )}
 
                             {/* unmute hint */}
                             {isActive && showHint && (
