@@ -602,14 +602,14 @@ Deno.serve(async (req) => {
     const seoChecksNamed = applyNames(seoChecks);
 
     const sumEarned = (cs: Check[]) => cs.reduce((s, c) => s + c.earned, 0);
-    const seoScore = sumEarned(seoChecks);
+    const seoScore = sumEarned(seoChecksNamed);
     const aiScore = sumEarned(aiChecks);
     const secScore = sumEarned(securityChecks);
 
     // Overall scaled to 100 from the 3 instant categories. Speed merges in client-side.
     const overall = Math.round(((seoScore + aiScore + secScore) / 75) * 100);
 
-    const allChecks = [...seoChecks, ...aiChecks, ...securityChecks];
+    const allChecks = [...seoChecksNamed, ...aiChecks, ...securityChecks];
     const issues = allChecks.filter((c) => !c.passed);
     const passed = allChecks.filter((c) => c.passed);
 
