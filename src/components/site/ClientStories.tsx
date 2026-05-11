@@ -379,7 +379,7 @@ export const ClientStories = () => {
                 animationDelay: "0ms",
               }}
             >
-              client stories · no. 01–03
+              client stories
             </div>
             <h2
               className={`byf-reveal ${revealed ? "show" : ""} font-light leading-[1.05]`}
