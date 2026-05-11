@@ -180,14 +180,16 @@ const Analyze = () => {
               <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 <CategoryCard
                   icon="🔍"
-                  title="SEO Basics"
+                  title="Google Findability"
+                  subtitle="Can customers find you on Google?"
                   score={result.categories.seo.score}
                   max={result.categories.seo.max}
                   checks={result.categories.seo.checks}
                 />
                 <CategoryCard
                   icon="⚡"
-                  title="Performance"
+                  title="Website Speed"
+                  subtitle="Does your site load fast on phones?"
                   score={result.categories.performance.score}
                   max={result.categories.performance.max}
                   checks={result.categories.performance.checks}
@@ -197,14 +199,16 @@ const Analyze = () => {
                 />
                 <CategoryCard
                   icon="🤖"
-                  title="AI Visibility"
+                  title="AI & Social Visibility"
+                  subtitle="Do AI tools and social media show you?"
                   score={result.categories.aiVisibility.score}
                   max={result.categories.aiVisibility.max}
                   checks={result.categories.aiVisibility.checks}
                 />
                 <CategoryCard
                   icon="🔒"
-                  title="Security"
+                  title="Trust & Security"
+                  subtitle="Is your site safe for customers?"
                   score={result.categories.security.score}
                   max={result.categories.security.max}
                   checks={result.categories.security.checks}
