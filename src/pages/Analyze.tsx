@@ -175,7 +175,7 @@ const Analyze = () => {
               </section>
 
               {/* Category Cards */}
-              <section className="grid md:grid-cols-2 gap-4">
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 <CategoryCard
                   icon="🔍"
                   title="SEO Basics"
@@ -191,6 +191,7 @@ const Analyze = () => {
                   checks={result.categories.performance.checks}
                   vitals={result.categories.performance.vitals}
                   unavailable={result.categories.performance.unavailable}
+                  unavailableReason={result.categories.performance.unavailableReason}
                 />
                 <CategoryCard
                   icon="🤖"
