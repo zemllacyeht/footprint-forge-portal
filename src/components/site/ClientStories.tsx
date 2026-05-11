@@ -341,20 +341,31 @@ export const ClientStories = () => {
                             <video
                               ref={(el) => (videoRefs.current[i] = el)}
                               data-video-id={s.id}
-                              src={s.videoSrc}
                               poster={s.poster}
                               muted
                               playsInline
                               loop
                               preload={isActive ? "metadata" : "none"}
                               onTimeUpdate={() => onTimeUpdate(i)}
+                              crossOrigin="anonymous"
                               aria-label={`${s.client}, ${s.business}: ${s.quote}`}
                               className="absolute inset-0 w-full h-full object-cover"
                               style={{
                                 background:
                                   "radial-gradient(60% 50% at 50% 40%, rgba(212,165,116,0.18), #0a0a0b 70%)",
                               }}
-                            />
+                            >
+                              {s.videoSrc && <source src={s.videoSrc} type="video/mp4" />}
+                              {s.captionsSrc && (
+                                <track
+                                  kind="captions"
+                                  src={s.captionsSrc}
+                                  srcLang="en"
+                                  label="English"
+                                  default
+                                />
+                              )}
+                            </video>
                             {/* number chip */}
                             <div
                               className="absolute top-3 left-3 px-2 py-1 text-[10px]"
