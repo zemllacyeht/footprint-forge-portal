@@ -18,10 +18,10 @@ const priorityClass: Record<string, string> = {
 };
 
 const categoryLabel: Record<string, string> = {
-  seo: "SEO",
-  performance: "Performance",
-  aiVisibility: "AI Visibility",
-  security: "Security",
+  seo: "Google Findability",
+  performance: "Website Speed",
+  aiVisibility: "AI & Social",
+  security: "Trust & Security",
 };
 
 const categoryClass: Record<string, string> = {

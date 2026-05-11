@@ -18,11 +18,11 @@ const services: Service[] = [
     key: "seo",
     icon: "🔍",
     title: "SEO Foundation",
-    body: "We rebuild your entire SEO structure so Google can find, understand, and rank your site. Most clients see a 30-50 point improvement within 30 days of launch.",
+    body: "We fix every signal Google uses to decide where you rank. Most of our clients see real ranking improvement within 30 days of their new site going live.",
     includes: [
-      "Title, meta, and heading rewrite",
+      "Title tags and meta descriptions",
+      "Heading structure and content",
       "Schema markup and Google indexing",
-      "Image alt text and canonical setup",
     ],
     tag: "Included in all packages",
   },
@@ -30,11 +30,11 @@ const services: Service[] = [
     key: "performance",
     icon: "⚡",
     title: "Performance Optimization",
-    body: "Slow sites lose customers before they read a single word. We optimize so your site loads in under 2 seconds on mobile, where 70% of your traffic comes from.",
+    body: "A slow website loses customers before they even read your first sentence. We make your site load fast on every device, especially the phones your customers are using right now.",
     includes: [
-      "Image and asset compression",
-      "Code splitting and lazy loading",
-      "Caching and CDN configuration",
+      "Image compression and optimization",
+      "Code cleanup and minification",
+      "Hosting performance review",
     ],
     tag: "Included in all packages",
   },
@@ -42,11 +42,11 @@ const services: Service[] = [
     key: "aiVisibility",
     icon: "🤖",
     title: "AI & Search Visibility",
-    body: "ChatGPT, Perplexity, and Google's AI Overviews are the new search. We structure your site so AI tools recommend your business when people ask.",
+    body: "More and more customers find businesses by asking ChatGPT or Google's AI. We make sure your business shows up when they do, with the right information, in the right format.",
     includes: [
-      "Open Graph and structured data",
+      "Schema markup for your business",
+      "Social media preview setup",
       "AI crawler access configuration",
-      "FAQ and conversational content",
     ],
     tag: "Professional & Premium packages",
   },
@@ -54,11 +54,11 @@ const services: Service[] = [
     key: "security",
     icon: "🔒",
     title: "Security & Trust Setup",
-    body: "Missing security headers signal to browsers and customers that your site isn't trustworthy. We configure everything so your site passes audits and converts more visitors.",
+    body: "We add all the invisible protections that make your website safe for customers and trusted by browsers. Most visitors never see these, but they absolutely notice the 'Not Secure' warning if they're missing.",
     includes: [
-      "HTTPS, HSTS, and security headers",
-      "Content Security Policy hardening",
-      "Permissions and referrer policy",
+      "SSL and HTTPS configuration",
+      "Security header setup",
+      "Ongoing security monitoring",
     ],
     tag: "Included in all packages",
   },
@@ -94,9 +94,7 @@ export const ServiceMatch = ({ scores }: Props) => {
             <div className="flex-1">
               <h3 className="font-display text-2xl font-medium mb-2">Full Digital Presence</h3>
               <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                Get everything fixed at once: website redesign, SEO, performance, security,
-                branding, AI visibility, and ongoing support. The fastest path from a broken
-                presence to one that wins customers every day.
+                Get everything fixed at once: a brand new website that's fast, secure, and built to rank on Google and show up in AI searches. Everything your business needs to win customers online, done right.
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 <a

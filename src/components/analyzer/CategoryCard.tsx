@@ -14,6 +14,7 @@ export interface CheckItem {
 interface Props {
   icon: string;
   title: string;
+  subtitle?: string;
   score: number | null;
   max: number;
   checks: CheckItem[];
@@ -41,7 +42,7 @@ const colorTokens = (score: number | null, max: number) => {
   return { bar: "bg-destructive", glow: "hsl(var(--destructive) / 0.55)", text: "hsl(var(--destructive))" };
 };
 
-export const CategoryCard = ({ icon, title, score, max, checks, vitals, unavailable, unavailableReason }: Props) => {
+export const CategoryCard = ({ icon, title, subtitle, score, max, checks, vitals, unavailable, unavailableReason }: Props) => {
   const [open, setOpen] = useState(false);
   const pct = score !== null ? (score / max) * 100 : 0;
   const tokens = colorTokens(score, max);
@@ -55,7 +56,7 @@ export const CategoryCard = ({ icon, title, score, max, checks, vitals, unavaila
           <div className="min-w-0">
             <h3 className="font-display text-lg font-medium leading-tight">{title}</h3>
             <p className="text-xs text-muted-foreground mt-1 leading-snug">
-              {summary(score, max, unavailable, unavailableReason)}
+              {unavailable ? (unavailableReason || "Speed data temporarily unavailable") : (subtitle || summary(score, max, unavailable, unavailableReason))}
             </p>
           </div>
         </div>

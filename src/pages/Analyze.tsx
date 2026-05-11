@@ -36,12 +36,12 @@ const grade = (s: number) =>
   s >= 90 ? "Excellent" : s >= 70 ? "Good" : s >= 50 ? "Needs Work" : "Poor";
 const summary = (s: number) =>
   s >= 90
-    ? "Your website is performing well, minor improvements possible."
+    ? "Your website is in great shape, let's keep it that way."
     : s >= 70
-      ? "Your website is decent but leaving money on the table."
+      ? "Your website is decent but you're leaving money on the table."
       : s >= 50
-        ? "Your website has serious gaps holding it back."
-        : "Your website is actively losing you customers.";
+        ? "Your website has real problems that are hurting your business."
+        : "Your website is costing you customers every day.";
 
 const Analyze = () => {
   const [params, setParams] = useSearchParams();
@@ -180,14 +180,16 @@ const Analyze = () => {
               <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 <CategoryCard
                   icon="🔍"
-                  title="SEO Basics"
+                  title="Google Findability"
+                  subtitle="Can customers find you on Google?"
                   score={result.categories.seo.score}
                   max={result.categories.seo.max}
                   checks={result.categories.seo.checks}
                 />
                 <CategoryCard
                   icon="⚡"
-                  title="Performance"
+                  title="Website Speed"
+                  subtitle="Does your site load fast on phones?"
                   score={result.categories.performance.score}
                   max={result.categories.performance.max}
                   checks={result.categories.performance.checks}
@@ -197,14 +199,16 @@ const Analyze = () => {
                 />
                 <CategoryCard
                   icon="🤖"
-                  title="AI Visibility"
+                  title="AI & Social Visibility"
+                  subtitle="Do AI tools and social media show you?"
                   score={result.categories.aiVisibility.score}
                   max={result.categories.aiVisibility.max}
                   checks={result.categories.aiVisibility.checks}
                 />
                 <CategoryCard
                   icon="🔒"
-                  title="Security"
+                  title="Trust & Security"
+                  subtitle="Is your site safe for customers?"
                   score={result.categories.security.score}
                   max={result.categories.security.max}
                   checks={result.categories.security.checks}
