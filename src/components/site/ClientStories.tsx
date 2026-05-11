@@ -583,18 +583,6 @@ export const ClientStories = () => {
                       {/* RIGHT: editorial content */}
                       <div className="md:col-span-7 max-w-[640px]">
                         <div
-                          className={`byf-reveal ${revealed && isActive ? "show" : ""} text-[11px] uppercase mb-6`}
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            letterSpacing: "0.18em",
-                            color: "#d4a574",
-                            animationDelay: "200ms",
-                          }}
-                        >
-                          client story · no. {s.id}
-                        </div>
-
-                        <div
                           className={`byf-reveal ${revealed && isActive ? "show" : ""}`}
                           style={{ animationDelay: "240ms" }}
                         >
