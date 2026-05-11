@@ -81,7 +81,8 @@ export const IssuesList = ({ issues, passed }: { issues: any[]; passed: any[] })
         >
           <div className="flex items-start gap-4">
             <span
-              className={`shrink-0 text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full border ${priorityClass[iss.priority]}`}
+              className={`shrink-0 uppercase rounded-full border ${priorityClass[iss.priority]}`}
+              style={{ padding: "4px 12px", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em" }}
             >
               {iss.priority}
             </span>
@@ -95,10 +96,12 @@ export const IssuesList = ({ issues, passed }: { issues: any[]; passed: any[] })
                 </span>
               </div>
               {iss.whyItMatters && (
-                <p className="text-sm text-muted-foreground mb-2">
-                  <span className="text-foreground/80 font-medium">Why this matters: </span>
-                  {iss.whyItMatters}
-                </p>
+                <div className="mb-2">
+                  <div className="uppercase tracking-widest mb-1" style={{ color: "rgba(232,237,232,0.5)", fontSize: "0.75rem" }}>
+                    Why this matters
+                  </div>
+                  <p className="text-sm text-muted-foreground">{iss.whyItMatters}</p>
+                </div>
               )}
               <p className="text-sm text-muted-foreground mb-2">
                 <span className="text-foreground/80 font-medium">What we found: </span>
