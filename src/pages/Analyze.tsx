@@ -36,12 +36,12 @@ const grade = (s: number) =>
   s >= 90 ? "Excellent" : s >= 70 ? "Good" : s >= 50 ? "Needs Work" : "Poor";
 const summary = (s: number) =>
   s >= 90
-    ? "Your website is performing well, minor improvements possible."
+    ? "Your website is in great shape, let's keep it that way."
     : s >= 70
-      ? "Your website is decent but leaving money on the table."
+      ? "Your website is decent but you're leaving money on the table."
       : s >= 50
-        ? "Your website has serious gaps holding it back."
-        : "Your website is actively losing you customers.";
+        ? "Your website has real problems that are hurting your business."
+        : "Your website is costing you customers every day.";
 
 const Analyze = () => {
   const [params, setParams] = useSearchParams();
