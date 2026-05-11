@@ -70,7 +70,7 @@ export const CategoryCard = ({
           <div className="text-2xl shrink-0" aria-hidden>{icon}</div>
           <div className="min-w-0">
             <h3 className="font-display text-lg font-medium leading-tight">{title}</h3>
-            <p className="text-xs text-muted-foreground mt-1 leading-snug">
+            <p className="mt-1 leading-snug" style={{ fontSize: "0.85rem", color: "hsl(var(--foreground) / 0.65)" }}>
               {loading
                 ? "Analyzing page speed..."
                 : unavailable
