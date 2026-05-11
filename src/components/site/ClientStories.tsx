@@ -89,6 +89,7 @@ export const ClientStories = () => {
   const [showHint, setShowHint] = useState(true);
   const [progress, setProgress] = useState(0);
   const [hovering, setHovering] = useState(false);
+  const [cardHover, setCardHover] = useState(false);
   const [optedIn, setOptedIn] = useState<Record<number, boolean>>({});
   const [magnet, setMagnet] = useState<{ prev: { x: number; y: number }; next: { x: number; y: number } }>({
     prev: { x: 0, y: 0 },
