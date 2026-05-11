@@ -14,6 +14,7 @@ export interface CheckItem {
 interface Props {
   icon: string;
   title: string;
+  subtitle?: string;
   score: number | null;
   max: number;
   checks: CheckItem[];
