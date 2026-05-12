@@ -144,24 +144,19 @@ export const PlanFinderWizard = () => {
     });
   };
 
-  const addAllToCart = () => {
+  const startWithPlan = () => {
     const lines = [recommendation.build, recommendation.care, ...recommendation.addons];
     const existingIds = new Set(items.map((i) => i.id));
-    let added = 0;
     lines.forEach((l) => {
       if (!existingIds.has(l.id)) {
         addItem({ id: l.id, name: l.name, price: l.price, category: l.category });
-        added++;
       }
     });
     toast({
-      title: added > 0 ? "Plan added to your cart" : "Already in your cart",
-      description:
-        added > 0
-          ? `${recommendation.build.name} build, ${recommendation.care.name}, and ${recommendation.addons.length} add-on${recommendation.addons.length === 1 ? "" : "s"}.`
-          : "Open the cart to review or send the request.",
+      title: "Plan added to your request",
+      description: `${recommendation.build.name} build, ${recommendation.care.name}, and ${recommendation.addons.length} add-on${recommendation.addons.length === 1 ? "" : "s"}.`,
     });
-    openCart();
+    window.location.href = "/contact";
   };
 
   return (
