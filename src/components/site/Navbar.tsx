@@ -48,7 +48,7 @@ export const Navbar = () => {
               variant="glass"
               size="sm"
               asChild
-              className={l.href === "/" ? "hidden lg:inline-flex" : undefined}
+              className={l.tabletHidden ? "hidden lg:inline-flex" : undefined}
             >
               <a href={l.href}>{l.label}</a>
             </Button>
