@@ -18,7 +18,7 @@ const STORIES: Story[] = [
   {
     id: "01",
     videoSrc: "/videos/byf-01.mp4",
-    poster: "/testimonial-01.jpg",
+    poster: "/posters/byf-01.jpg",
     client: "David & Linh Park",
     business: "Co-founders, Marrow Coffee Roasters",
     quote:
