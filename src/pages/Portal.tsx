@@ -24,6 +24,7 @@ import {
 import { toast } from "sonner";
 import { ClientWorkspace } from "@/components/portal/ClientWorkspace";
 import { ClientInvoices } from "@/components/portal/ClientInvoices";
+import { SubscriptionPlans } from "@/components/portal/SubscriptionPlans";
 import { ProjectTimeline } from "@/components/portal/ProjectTimeline";
 import { ProjectApprovals } from "@/components/portal/ProjectApprovals";
 import { PortalOverview } from "@/components/portal/PortalOverview";
