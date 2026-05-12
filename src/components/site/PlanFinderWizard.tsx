@@ -353,10 +353,6 @@ export const PlanFinderWizard = () => {
                       Start over
                     </Button>
                   </div>
-                      <RotateCcw className="h-4 w-4" />
-                      Start over
-                    </Button>
-                  </div>
 
                   <div className="mt-6 text-xs text-muted-foreground">
                     Need something different?{" "}
