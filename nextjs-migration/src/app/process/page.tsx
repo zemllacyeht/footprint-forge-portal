@@ -1,0 +1,51 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { PageLayout } from "@/components/site/PageLayout";
+import { PageHeader } from "@/components/site/PageHeader";
+import { HowItWorks } from "@/components/ui/how-it-works";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Our Process · Build Your Footprint",
+  description:
+    "A clear, five-step path from idea to live: discover, design, build, preview in your private hub, and launch, with ongoing care included.",
+  openGraph: {
+    title: "Our Process · Build Your Footprint",
+    description: "A clear path from idea to live.",
+  },
+};
+
+export default function ProcessPage() {
+  return (
+    <PageLayout>
+      <PageHeader
+        eyebrow="How we work"
+        breadcrumb="Process"
+        title={<>A clear path from <span className="italic text-gradient-gold">idea to live</span>.</>}
+        description="No mystery, no waiting in the dark. Every project follows the same five steps, with previews and approvals happening inside your secure client portal."
+      />
+
+      <HowItWorks />
+
+      <section className="py-24 relative">
+        <div className="container">
+          <div className="max-w-4xl mx-auto glass rounded-2xl p-10 md:p-14 text-center">
+            <div className="text-xs uppercase tracking-[0.25em] text-accent mb-4">Ready when you are</div>
+            <h2 className="font-display text-3xl md:text-5xl font-light leading-tight mb-6">
+              Let's map out <span className="italic text-gradient-gold">your timeline</span>.
+            </h2>
+            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Most projects launch in 3–6 weeks. Tell us about yours and we'll send back a phased plan within one business day.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="hero" size="lg" asChild>
+                <Link href="/contact">Start a project <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </PageLayout>
+  );
+}

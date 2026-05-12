@@ -1,0 +1,278 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Loader2, LogOut, Shield, ShieldOff, Pencil, RefreshCw, UserPlus, Briefcase, Gift, LifeBuoy, Users, FolderUp, CreditCard } from "lucide-react";
+import { toast } from "sonner";
+import { ClientWorkspace } from "@/components/portal/ClientWorkspace";
+import { ClientInvoices } from "@/components/portal/ClientInvoices";
+import { ProjectTimeline } from "@/components/portal/ProjectTimeline";
+import { ProjectApprovals } from "@/components/portal/ProjectApprovals";
+import { BuildAssetsPanel } from "@/components/portal/BuildAssetsPanel";
+import { AdminReferrals } from "@/components/admin/AdminReferrals";
+import { AdminSupport } from "@/components/admin/AdminSupport";
+import { AdminSubscriptionPlans } from "@/components/admin/AdminSubscriptionPlans";
+import { SubscriptionPlans } from "@/components/portal/SubscriptionPlans";
+import { z } from "zod";
+
+const STATUSES = ["onboarding", "design", "review", "development", "live", "paused"] as const;
+
+interface ClientRow {
+  id: string; email: string | null; company_name: string | null; contact_name: string | null;
+  phone: string | null; project_status: string; project_url: string | null; notes: string | null;
+  created_at: string; is_admin: boolean;
+}
+
+const inviteSchema = z.object({
+  email: z.string().trim().email("Valid email required").max(255),
+  company_name: z.string().trim().max(120).optional().or(z.literal("")),
+  contact_name: z.string().trim().max(120).optional().or(z.literal("")),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  project_url: z.string().trim().url("Must be a valid URL").max(500).optional().or(z.literal("")),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+
+interface Props { userId: string; userEmail: string; }
+
+export function AdminClient({ userId }: Props) {
+  const router = useRouter();
+  const supabase = createClient();
+  const [rows, setRows] = useState<ClientRow[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [editing, setEditing] = useState<ClientRow | null>(null);
+  const [draftStatus, setDraftStatus] = useState("");
+  const [draftNotes, setDraftNotes] = useState("");
+  const [draftUrl, setDraftUrl] = useState("");
+  const [draftCompany, setDraftCompany] = useState("");
+  const [draftContact, setDraftContact] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [invite, setInvite] = useState({ email: "", company_name: "", contact_name: "", phone: "", project_url: "", notes: "" });
+  const [inviting, setInviting] = useState(false);
+  const [workspaceFor, setWorkspaceFor] = useState<ClientRow | null>(null);
+
+  const load = async () => {
+    setRefreshing(true);
+    const [{ data: profiles, error: pErr }, { data: roles, error: rErr }] = await Promise.all([
+      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("user_roles").select("user_id, role"),
+    ]);
+    setRefreshing(false);
+    if (pErr || rErr) { toast.error("Failed to load clients"); return; }
+    const adminSet = new Set((roles ?? []).filter((r) => r.role === "admin").map((r) => r.user_id));
+    setRows((profiles ?? []).map((p: any) => ({ ...p, is_admin: adminSet.has(p.id) })));
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const openEditor = (row: ClientRow) => {
+    setEditing(row); setDraftStatus(row.project_status); setDraftNotes(row.notes ?? "");
+    setDraftUrl(row.project_url ?? ""); setDraftCompany(row.company_name ?? ""); setDraftContact(row.contact_name ?? "");
+  };
+
+  const saveEditor = async () => {
+    if (!editing) return;
+    if (draftUrl && !/^https?:\/\//i.test(draftUrl)) return toast.error("Project URL must start with http(s)://");
+    setSaving(true);
+    const { error } = await supabase.from("profiles").update({ project_status: draftStatus, notes: draftNotes || null, project_url: draftUrl || null, company_name: draftCompany || null, contact_name: draftContact || null }).eq("id", editing.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Client updated"); setEditing(null); load();
+  };
+
+  const toggleAdmin = async (row: ClientRow) => {
+    if (row.id === userId && row.is_admin) { toast.error("You can't demote yourself"); return; }
+    if (row.is_admin) {
+      const { error } = await supabase.from("user_roles").delete().eq("user_id", row.id).eq("role", "admin");
+      if (error) return toast.error(error.message);
+      toast.success(`${row.email} is no longer an admin`);
+    } else {
+      const { error } = await supabase.from("user_roles").insert({ user_id: row.id, role: "admin" });
+      if (error) return toast.error(error.message);
+      toast.success(`${row.email} is now an admin`);
+    }
+    load();
+  };
+
+  const handleSignOut = async () => { await supabase.auth.signOut(); router.replace("/"); };
+
+  const submitInvite = async () => {
+    const parsed = inviteSchema.safeParse(invite);
+    if (!parsed.success) return toast.error(parsed.error.errors[0].message);
+    setInviting(true);
+    const { data, error } = await supabase.functions.invoke("create-client", { body: parsed.data });
+    setInviting(false);
+    if (error) return toast.error(error.message);
+    if ((data as any)?.error) return toast.error((data as any).error);
+    toast.success("Client invited. They'll receive an email to set their password");
+    setInviteOpen(false);
+    setInvite({ email: "", company_name: "", contact_name: "", phone: "", project_url: "", notes: "" });
+    load();
+  };
+
+  return (
+    <main className="min-h-screen bg-background">
+      <header className="border-b border-border bg-background/70 backdrop-blur-xl sticky top-0 z-40">
+        <div className="container flex items-center justify-between py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={() => router.push("/portal")}><ArrowLeft className="h-4 w-4" /> Portal</Button>
+            <div className="leading-tight">
+              <div className="font-display text-sm font-semibold">Admin <span className="text-gradient-gold">Console</span></div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Build Your Footprint</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="hero" size="sm" onClick={() => setInviteOpen(true)}><UserPlus className="h-4 w-4" /> Invite client</Button>
+            <Button variant="ghost" size="sm" onClick={load} disabled={refreshing}><RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} /> Refresh</Button>
+            <Button variant="ghost" size="sm" onClick={handleSignOut}><LogOut className="h-4 w-4" /> Sign out</Button>
+          </div>
+        </div>
+      </header>
+
+      <section className="container py-10">
+        <Tabs defaultValue="clients" className="space-y-6">
+          <TabsList className="bg-muted/40 p-1">
+            <TabsTrigger value="clients" className="gap-1.5"><Users className="h-4 w-4" /> Clients</TabsTrigger>
+            <TabsTrigger value="referrals" className="gap-1.5"><Gift className="h-4 w-4" /> Referrals</TabsTrigger>
+            <TabsTrigger value="support" className="gap-1.5"><LifeBuoy className="h-4 w-4" /> Support</TabsTrigger>
+            <TabsTrigger value="plans" className="gap-1.5"><CreditCard className="h-4 w-4" /> Plans</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="clients" className="space-y-6">
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Clients</p>
+                <h1 className="font-display text-4xl font-semibold tracking-tight mt-1">{rows.length} {rows.length === 1 ? "account" : "accounts"}</h1>
+              </div>
+            </div>
+            <div className="glass rounded-2xl border border-border/50 overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Company</TableHead><TableHead>Contact</TableHead><TableHead>Email</TableHead>
+                    <TableHead>Status</TableHead><TableHead>Role</TableHead><TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.length === 0 ? (
+                    <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-12">No clients yet. Use "Invite client" to add your first.</TableCell></TableRow>
+                  ) : rows.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell className="font-medium">{row.company_name ?? "Not set"}</TableCell>
+                      <TableCell>{row.contact_name ?? "Not set"}</TableCell>
+                      <TableCell className="text-muted-foreground">{row.email ?? "Not set"}</TableCell>
+                      <TableCell><Badge variant="secondary" className="capitalize">{row.project_status}</Badge></TableCell>
+                      <TableCell>{row.is_admin ? <Badge className="bg-gradient-gold text-accent-foreground">Admin</Badge> : <Badge variant="outline">Client</Badge>}</TableCell>
+                      <TableCell className="text-right space-x-1">
+                        <Button variant="ghost" size="sm" onClick={() => setWorkspaceFor(row)}><Briefcase className="h-4 w-4" /> Workspace</Button>
+                        <Button variant="ghost" size="sm" onClick={() => openEditor(row)}><Pencil className="h-4 w-4" /> Edit</Button>
+                        <Button variant="ghost" size="sm" onClick={() => toggleAdmin(row)} disabled={row.id === userId && row.is_admin}>
+                          {row.is_admin ? <><ShieldOff className="h-4 w-4" /> Demote</> : <><Shield className="h-4 w-4" /> Make admin</>}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </TabsContent>
+          <TabsContent value="referrals"><AdminReferrals /></TabsContent>
+          <TabsContent value="support"><AdminSupport /></TabsContent>
+          <TabsContent value="plans"><AdminSubscriptionPlans /></TabsContent>
+        </Tabs>
+      </section>
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editing?.company_name || editing?.email || "Edit client"}</DialogTitle>
+            <DialogDescription>Update the client's project details and notes.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2"><Label>Company</Label><Input value={draftCompany} onChange={(e) => setDraftCompany(e.target.value)} /></div>
+              <div className="space-y-2"><Label>Contact name</Label><Input value={draftContact} onChange={(e) => setDraftContact(e.target.value)} /></div>
+            </div>
+            <div className="space-y-2">
+              <Label>Project status</Label>
+              <Select value={draftStatus} onValueChange={setDraftStatus}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{STATUSES.map((s) => <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Project URL</Label>
+              <Input value={draftUrl} onChange={(e) => setDraftUrl(e.target.value)} placeholder="https://example.lovable.app" />
+            </div>
+            <div className="space-y-2">
+              <Label>Notes (visible to client)</Label>
+              <Textarea rows={4} value={draftNotes} onChange={(e) => setDraftNotes(e.target.value)} placeholder="Share an update…" maxLength={2000} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
+            <Button variant="hero" onClick={saveEditor} disabled={saving}>{saving && <Loader2 className="h-4 w-4 animate-spin" />} Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Invite a new client</DialogTitle>
+            <DialogDescription>They'll receive an email with a secure link to set their own password.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2"><Label>Email *</Label><Input type="email" value={invite.email} onChange={(e) => setInvite({ ...invite, email: e.target.value })} placeholder="owner@example.com" /></div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2"><Label>Company</Label><Input value={invite.company_name} onChange={(e) => setInvite({ ...invite, company_name: e.target.value })} /></div>
+              <div className="space-y-2"><Label>Contact name</Label><Input value={invite.contact_name} onChange={(e) => setInvite({ ...invite, contact_name: e.target.value })} /></div>
+            </div>
+            <div className="space-y-2"><Label>Phone</Label><Input value={invite.phone} onChange={(e) => setInvite({ ...invite, phone: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Project URL</Label><Input value={invite.project_url} onChange={(e) => setInvite({ ...invite, project_url: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Welcome note</Label><Textarea rows={3} value={invite.notes} onChange={(e) => setInvite({ ...invite, notes: e.target.value })} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setInviteOpen(false)}>Cancel</Button>
+            <Button variant="hero" onClick={submitInvite} disabled={inviting}>{inviting && <Loader2 className="h-4 w-4 animate-spin" />} Send invite</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!workspaceFor} onOpenChange={(o) => !o && setWorkspaceFor(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{workspaceFor?.company_name || workspaceFor?.email} workspace</DialogTitle>
+            <DialogDescription>Manage timeline, approvals, files, messages, and billing for this client.</DialogDescription>
+          </DialogHeader>
+          {workspaceFor && (
+            <Tabs defaultValue="timeline" className="space-y-4">
+              <TabsList className="flex flex-wrap h-auto gap-1">
+                <TabsTrigger value="timeline">Timeline</TabsTrigger>
+                <TabsTrigger value="approvals">Approvals</TabsTrigger>
+                <TabsTrigger value="workspace">Files & Messages</TabsTrigger>
+                <TabsTrigger value="assets"><FolderUp className="h-4 w-4" /> Build Assets</TabsTrigger>
+                <TabsTrigger value="billing">Billing</TabsTrigger>
+              </TabsList>
+              <TabsContent value="timeline"><ProjectTimeline clientId={workspaceFor.id} isAdmin /></TabsContent>
+              <TabsContent value="approvals"><ProjectApprovals clientId={workspaceFor.id} isAdmin /></TabsContent>
+              <TabsContent value="workspace"><ClientWorkspace clientId={workspaceFor.id} isAdmin /></TabsContent>
+              <TabsContent value="assets"><BuildAssetsPanel clientId={workspaceFor.id} isAdmin /></TabsContent>
+              <TabsContent value="billing" className="space-y-6"><SubscriptionPlans clientId={workspaceFor.id} /><ClientInvoices clientId={workspaceFor.id} isAdmin /></TabsContent>
+            </Tabs>
+          )}
+        </DialogContent>
+      </Dialog>
+    </main>
+  );
+}

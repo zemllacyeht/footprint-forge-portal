@@ -1,0 +1,96 @@
+import Link from "next/link";
+import { Mail, Linkedin, Twitter, Instagram, LogIn } from "lucide-react";
+import LogoMark from "@/assets/logo-mark.svg";
+
+export const Footer = () => {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-border pt-12 md:pt-16 pb-8 md:pb-12 mt-12 md:mt-16 relative">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+      <div className="container">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <LogoMark className="h-9 w-9" aria-label="Build Your Footprint" />
+              <div className="leading-tight">
+                <div className="font-display text-sm font-semibold">
+                  Build Your <span className="text-gradient-gold">Footprint</span>
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Web Services</div>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4 max-w-xs">
+              Crafting intentional digital footprints for businesses that value design and longevity.
+            </p>
+            <a
+              href="mailto:hello@buildyourfootprint.com"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-accent transition-colors"
+            >
+              <Mail className="h-3.5 w-3.5" />
+              hello@buildyourfootprint.com
+            </a>
+          </div>
+
+          <div>
+            <h4 className="text-xs uppercase tracking-[0.2em] text-accent mb-4">Studio</h4>
+            <ul className="space-y-2.5 text-sm">
+              <li><Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">Web Design</Link></li>
+              <li><Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">Hosting & Care</Link></li>
+              <li><Link href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
+              <li>
+                <Link href="/analyze" className="text-primary hover:text-primary/80 transition-colors">
+                  Free Audit
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-xs uppercase tracking-[0.2em] text-accent mb-4">Client</h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link href="/login" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+                  <LogIn className="h-3.5 w-3.5" />
+                  Client Login
+                </Link>
+              </li>
+              <li><Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">Project Portal</Link></li>
+              <li><Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">Billing & Invoices</Link></li>
+              <li><Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Support</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-xs uppercase tracking-[0.2em] text-accent mb-4">Connect</h4>
+            <div className="flex items-center gap-2 mb-5">
+              <span aria-label="LinkedIn (coming soon)" title="Coming soon" className="h-9 w-9 rounded-lg glass grid place-items-center text-muted-foreground/50 cursor-not-allowed">
+                <Linkedin className="h-4 w-4" />
+              </span>
+              <span aria-label="Twitter (coming soon)" title="Coming soon" className="h-9 w-9 rounded-lg glass grid place-items-center text-muted-foreground/50 cursor-not-allowed">
+                <Twitter className="h-4 w-4" />
+              </span>
+              <span aria-label="Instagram (coming soon)" title="Coming soon" className="h-9 w-9 rounded-lg glass grid place-items-center text-muted-foreground/50 cursor-not-allowed">
+                <Instagram className="h-4 w-4" />
+              </span>
+            </div>
+            <ul className="space-y-2.5 text-sm">
+              <li><Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
+              <li><Link href="/cookies" className="text-muted-foreground hover:text-foreground transition-colors">Cookie Policy</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="text-xs text-muted-foreground">
+            © {year} Build Your Footprint. Designed with intention.
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Built remotely · Serving clients worldwide
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
