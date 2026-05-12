@@ -21,7 +21,7 @@ const services: Service[] = [
     number: "001",
     tag: "Brand",
     title: "Brand Identity",
-    description: "Logo systems, color palettes, and visual languages that make you unmistakable.",
+    description: "Logos, color, and visual systems that make you unmistakable.",
     icon: Palette,
     details: [
       "Primary and secondary logo lockups",
@@ -32,9 +32,35 @@ const services: Service[] = [
   },
   {
     number: "002",
-    tag: "Web",
+    tag: "Brand",
+    title: "Content & Photography",
+    description: "Original photo, video, and copy written for your business.",
+    icon: Camera,
+    details: [
+      "On-location product and team photos",
+      "Short-form video for social",
+      "Copywriting for web and email",
+      "Edited, color-graded, ready to ship",
+    ],
+  },
+  {
+    number: "003",
+    tag: "Brand",
+    title: "Email & Automation",
+    description: "Branded campaigns and automations that turn one-time visitors into repeat customers.",
+    icon: Mail,
+    details: [
+      "Welcome and onboarding sequences",
+      "Branded transactional templates",
+      "Abandoned cart and re-engagement flows",
+      "Integrated with your CRM",
+    ],
+  },
+  {
+    number: "004",
+    tag: "Build",
     title: "Custom Web Design",
-    description: "Hand-crafted, conversion-focused websites built around your business goals.",
+    description: "Hand-crafted, conversion-focused websites built around your goals.",
     icon: Code2,
     details: [
       "Bespoke layouts, never templates",
@@ -44,23 +70,10 @@ const services: Service[] = [
     ],
   },
   {
-    number: "003",
-    tag: "Infrastructure",
-    title: "Domain & Hosting",
-    description: "We handle the technical side: domains, SSL, hosting, and uptime monitoring.",
-    icon: Globe,
-    details: [
-      "Domain purchase and DNS setup",
-      "Free SSL certificates included",
-      "Global CDN for fast load times",
-      "24/7 uptime monitoring",
-    ],
-  },
-  {
-    number: "004",
-    tag: "Devices",
+    number: "005",
+    tag: "Build",
     title: "Responsive Builds",
-    description: "Pixel-perfect on every device, from 4-inch phones to 4K displays.",
+    description: "Looks right on every screen, from phones to widescreen monitors.",
     icon: Smartphone,
     details: [
       "Mobile-first design approach",
@@ -70,10 +83,23 @@ const services: Service[] = [
     ],
   },
   {
-    number: "005",
-    tag: "Search",
+    number: "006",
+    tag: "Build",
+    title: "Domain & Hosting",
+    description: "Domains, SSL, hosting, and uptime monitoring, fully managed.",
+    icon: Globe,
+    details: [
+      "Domain purchase and DNS setup",
+      "Free SSL certificates included",
+      "Global CDN for fast load times",
+      "24/7 uptime monitoring",
+    ],
+  },
+  {
+    number: "007",
+    tag: "Grow",
     title: "SEO Foundations",
-    description: "Built-in search optimization so your customers can actually find you.",
+    description: "Search optimization built in, so the customers looking for you can find you.",
     icon: LineChart,
     details: [
       "Keyword research for your niche",
@@ -83,8 +109,8 @@ const services: Service[] = [
     ],
   },
   {
-    number: "006",
-    tag: "Marketing",
+    number: "008",
+    tag: "Grow",
     title: "Marketing Collateral",
     description: "Social graphics, email banners, ads, and print pieces, always on-brand.",
     icon: Megaphone,
@@ -96,36 +122,10 @@ const services: Service[] = [
     ],
   },
   {
-    number: "007",
-    tag: "Content",
-    title: "Content & Photography",
-    description: "Original photography, video, and copy that bring your brand story to life.",
-    icon: Camera,
-    details: [
-      "On-location product and team photos",
-      "Short-form video for social",
-      "Copywriting for web and email",
-      "Edited, color-graded, ready to ship",
-    ],
-  },
-  {
-    number: "008",
-    tag: "Lifecycle",
-    title: "Email & Automation",
-    description: "Branded email templates and automations that nurture leads while you sleep.",
-    icon: Mail,
-    details: [
-      "Welcome and onboarding sequences",
-      "Branded transactional templates",
-      "Abandoned cart and re-engagement flows",
-      "Integrated with your CRM",
-    ],
-  },
-  {
     number: "009",
-    tag: "Maintenance",
+    tag: "Grow",
     title: "Ongoing Care",
-    description: "Updates, security patches, content edits, all handled every month.",
+    description: "Updates, security patches, and content edits, handled every month.",
     icon: Shield,
     details: [
       "Monthly security and dependency updates",
@@ -145,8 +145,8 @@ const ServicesPage = () => {
       <PageHeader
         eyebrow="Services"
         breadcrumb="Services"
-        title={<>Everything you need to <span className="italic text-gradient-gold">go live</span>, and stay ahead.</>}
-        description="From the first sketch to the monthly invoice, we handle the full stack of design, development, and care so you can focus on running your business."
+        title={<>A full studio, <span className="italic text-gradient-gold">under one roof</span>.</>}
+        description="Brand. Build. Grow. Three disciplines, nine connected services. Everything your business needs to come online, stay online, and bring in customers."
       />
 
       <section id="services" className="pb-24 md:pb-32 relative">
