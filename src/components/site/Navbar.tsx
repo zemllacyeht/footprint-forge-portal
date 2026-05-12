@@ -43,7 +43,13 @@ export const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-2">
           {links.map((l) => (
-            <Button key={l.href} variant="glass" size="sm" asChild>
+            <Button
+              key={l.href}
+              variant="glass"
+              size="sm"
+              asChild
+              className={l.href === "/" ? "hidden lg:inline-flex" : undefined}
+            >
               <a href={l.href}>{l.label}</a>
             </Button>
           ))}
