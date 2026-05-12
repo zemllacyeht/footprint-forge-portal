@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
-const links = [
-  { href: "/", label: "Home" },
+const links: { href: string; label: string; tabletHidden?: boolean }[] = [
+  { href: "/", label: "Home", tabletHidden: true },
   { href: "/services", label: "Services" },
   { href: "/process", label: "Process" },
   { href: "/work", label: "Work" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/analyze", label: "Free Audit" },
-  { href: "/contact", label: "Contact" },
+  { href: "/analyze", label: "Free Audit", tabletHidden: true },
+  { href: "/contact", label: "Contact", tabletHidden: true },
 ];
 
 export const Navbar = () => {
