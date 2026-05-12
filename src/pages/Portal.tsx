@@ -90,6 +90,9 @@ const Portal = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/support"><LifeBuoy className="h-4 w-4" /> Support</Link>
+            </Button>
             {role === "admin" && (
               <Button variant="glass" size="sm" onClick={() => navigate("/admin")}>
                 Admin Console
