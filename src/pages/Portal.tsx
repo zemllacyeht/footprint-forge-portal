@@ -24,6 +24,7 @@ import {
 import { toast } from "sonner";
 import { ClientWorkspace } from "@/components/portal/ClientWorkspace";
 import { ClientInvoices } from "@/components/portal/ClientInvoices";
+import { SubscriptionPlans } from "@/components/portal/SubscriptionPlans";
 import { ProjectTimeline } from "@/components/portal/ProjectTimeline";
 import { ProjectApprovals } from "@/components/portal/ProjectApprovals";
 import { PortalOverview } from "@/components/portal/PortalOverview";
@@ -229,7 +230,8 @@ const Portal = () => {
 
             <TabsContent value="billing">
               <Card className="glass border-border/50">
-                <CardContent className="pt-6">
+                <CardContent className="pt-6 space-y-8">
+                  <SubscriptionPlans clientId={user.id} />
                   <ClientInvoices clientId={user.id} isAdmin={false} />
                 </CardContent>
               </Card>

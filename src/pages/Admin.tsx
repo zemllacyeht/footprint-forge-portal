@@ -44,6 +44,7 @@ import {
   LifeBuoy,
   Users,
   FolderUp,
+  CreditCard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ClientWorkspace } from "@/components/portal/ClientWorkspace";
@@ -53,6 +54,8 @@ import { ProjectApprovals } from "@/components/portal/ProjectApprovals";
 import { BuildAssetsPanel } from "@/components/portal/BuildAssetsPanel";
 import { AdminReferrals } from "@/components/admin/AdminReferrals";
 import { AdminSupport } from "@/components/admin/AdminSupport";
+import { AdminSubscriptionPlans } from "@/components/admin/AdminSubscriptionPlans";
+import { SubscriptionPlans } from "@/components/portal/SubscriptionPlans";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { z } from "zod";
 
@@ -300,6 +303,9 @@ const Admin = () => {
             <TabsTrigger value="support" className="gap-1.5">
               <LifeBuoy className="h-4 w-4" /> Support
             </TabsTrigger>
+            <TabsTrigger value="plans" className="gap-1.5">
+              <CreditCard className="h-4 w-4" /> Plans
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="clients" className="space-y-6">
@@ -387,6 +393,10 @@ const Admin = () => {
 
           <TabsContent value="support">
             <AdminSupport />
+          </TabsContent>
+
+          <TabsContent value="plans">
+            <AdminSubscriptionPlans />
           </TabsContent>
         </Tabs>
       </section>
@@ -569,7 +579,8 @@ const Admin = () => {
               <TabsContent value="assets">
                 <BuildAssetsPanel clientId={workspaceFor.id} isAdmin />
               </TabsContent>
-              <TabsContent value="billing">
+              <TabsContent value="billing" className="space-y-6">
+                <SubscriptionPlans clientId={workspaceFor.id} />
                 <ClientInvoices clientId={workspaceFor.id} isAdmin />
               </TabsContent>
             </Tabs>
