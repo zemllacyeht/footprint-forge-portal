@@ -57,7 +57,7 @@ const STORIES: Story[] = [
     metrics: [
       { value: "3.8×", label: "inquiry value" },
       { value: "14", label: "international clients this yr" },
-      { value: "$12k", label: "avg commission" },
+      { value: "$6k", label: "avg commission" },
     ],
     description:
       "A painter whose website had been quietly contradicting her work for years. We rebuilt around her actual artistry and the right customers started finding her.",
