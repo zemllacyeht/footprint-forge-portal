@@ -33,21 +33,19 @@ export const Footer = () => {
             </a>
           </div>
 
-          {/* Services */}
+          {/* Studio */}
           <div>
-            <h4 className="text-xs uppercase tracking-[0.2em] text-accent mb-4">Services</h4>
+            <h4 className="text-xs uppercase tracking-[0.2em] text-accent mb-4">Studio</h4>
             <ul className="space-y-2.5 text-sm">
               <li><a href="/services" className="text-muted-foreground hover:text-foreground transition-colors">Web Design</a></li>
-              <li><a href="/services" className="text-muted-foreground hover:text-foreground transition-colors">Development</a></li>
               <li><a href="/services" className="text-muted-foreground hover:text-foreground transition-colors">Hosting & Care</a></li>
               <li><a href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a></li>
-              <li><a href="/work" className="text-muted-foreground hover:text-foreground transition-colors">Our Work</a></li>
               <li>
-                <a href="/analyze" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-                  Free Website Audit
-                  <span className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-primary/15 text-primary font-semibold">New</span>
+                <a href="/analyze" className="text-primary hover:text-primary/80 transition-colors">
+                  Free Audit
                 </a>
               </li>
+              <li><a href="/work" className="text-muted-foreground hover:text-foreground transition-colors">Our Work</a></li>
             </ul>
           </div>
 
