@@ -98,7 +98,8 @@ export const Hero = () => {
             className="font-display text-5xl md:text-7xl lg:text-8xl font-light leading-[0.95] animate-fade-up"
             style={{ fontOpticalSizing: "auto" }}
           >
-            Take control of your<br />
+            Take control<br />
+            of your<br />
             <span className="italic font-normal text-primary">digital footprint.</span>
           </h1>
 
