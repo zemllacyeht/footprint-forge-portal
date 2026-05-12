@@ -34,7 +34,7 @@ const STORIES: Story[] = [
   {
     id: "02",
     videoSrc: "/videos/byf-02.mp4",
-    poster: "/testimonial-02.jpg",
+    poster: "/posters/byf-02.jpg",
     client: "Marcus Reid",
     business: "CEO, Reid & Sons Construction",
     quote:
@@ -50,7 +50,7 @@ const STORIES: Story[] = [
   {
     id: "03",
     videoSrc: "/videos/byf-03.mp4",
-    poster: "/testimonial-03.jpg",
+    poster: "/posters/byf-03.jpg",
     client: "Aisha Okonkwo",
     business: "Founder, Aisha Okonkwo Studio",
     quote: "I feel like the exact idea i had in my head was transferred to my site.",
