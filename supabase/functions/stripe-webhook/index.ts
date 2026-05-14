@@ -12,21 +12,27 @@ const admin = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
 )
 
-async function notifyReceipt(userId: string, amountCents: number, currency: string, invoiceUrl: string | null) {
+async function notifyReceipt(
+  userId: string,
+  amountCents: number,
+  currency: string,
+  invoiceUrl: string | null,
+  invoiceId: string,
+) {
   try {
     const { data: profile } = await admin.from('profiles').select('email, contact_name, company_name').eq('id', userId).maybeSingle()
     if (!profile?.email) return
     await admin.functions.invoke('send-transactional-email', {
       body: {
-        to: profile.email,
-        template: 'payment-receipt',
-        data: {
+        templateName: 'payment-receipt',
+        recipientEmail: profile.email,
+        templateData: {
           recipientName: profile.contact_name || profile.company_name || 'there',
           amount: (amountCents / 100).toFixed(2),
           currency: currency.toUpperCase(),
           invoiceUrl,
         },
-        idempotencyKey: `receipt-${invoiceUrl || Date.now()}`,
+        idempotencyKey: `receipt-${invoiceId}`,
       },
     })
   } catch (e) {
@@ -143,7 +149,7 @@ Deno.serve(async (req) => {
             stripe_invoice_id: inv.id,
             updated_at: new Date().toISOString(),
           }, { onConflict: 'stripe_invoice_id' })
-          await notifyReceipt(userId, inv.amount_paid ?? 0, inv.currency || 'usd', inv.hosted_invoice_url || null)
+          await notifyReceipt(userId, inv.amount_paid ?? 0, inv.currency || 'usd', inv.hosted_invoice_url || null, inv.id)
         }
         break
       }
