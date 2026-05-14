@@ -1,4 +1,3 @@
-import { sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const MAX_RETRIES = 5
@@ -7,9 +6,28 @@ const DEFAULT_SEND_DELAY_MS = 200
 const DEFAULT_AUTH_TTL_MINUTES = 15
 const DEFAULT_TRANSACTIONAL_TTL_MINUTES = 60
 
+// Replies to transactional emails route here instead of bouncing
+// off the noreply@ sending address.
+const REPLY_TO = 'hello@buildyourfootprint.com'
+
+// Resend API endpoint
+const RESEND_SEND_URL = 'https://api.resend.com/emails'
+
+// Custom error shape that mirrors the previous EmailAPIError contract
+// so the surrounding retry/DLQ/rate-limit logic keeps working unchanged.
+class ResendAPIError extends Error {
+  status: number
+  retryAfterSeconds: number | null
+
+  constructor(message: string, status: number, retryAfterSeconds: number | null) {
+    super(message)
+    this.name = 'ResendAPIError'
+    this.status = status
+    this.retryAfterSeconds = retryAfterSeconds
+  }
+}
+
 // Check if an error is a rate-limit (429) response.
-// Uses EmailAPIError.status when available (email-js >=0.x with structured errors),
-// falls back to parsing the error message for older versions.
 function isRateLimited(error: unknown): boolean {
   if (error && typeof error === 'object' && 'status' in error) {
     return (error as { status: number }).status === 429
@@ -26,7 +44,7 @@ function isForbidden(error: unknown): boolean {
   return error instanceof Error && error.message.includes('403')
 }
 
-// Extract Retry-After seconds from a structured EmailAPIError, or default to 60s.
+// Extract Retry-After seconds from a structured ResendAPIError, or default to 60s.
 function getRetryAfterSeconds(error: unknown): number {
   if (error && typeof error === 'object' && 'retryAfterSeconds' in error) {
     return (error as { retryAfterSeconds: number | null }).retryAfterSeconds ?? 60
@@ -78,10 +96,96 @@ async function moveToDlq(
   }
 }
 
+// Send an email via the Resend API. Throws ResendAPIError on non-2xx responses
+// so the surrounding retry/DLQ/rate-limit logic can react to status codes.
+async function sendResendEmail(
+  apiKey: string,
+  siteUrl: string,
+  payload: {
+    to: string
+    from: string
+    subject: string
+    html: string
+    text: string
+    purpose?: string
+    label?: string
+    idempotency_key?: string
+    unsubscribe_token?: string
+  }
+): Promise<void> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  }
+
+  // Resend honors Idempotency-Key for 24h — re-sending the same key
+  // returns the original send rather than duplicating.
+  if (payload.idempotency_key) {
+    headers['Idempotency-Key'] = payload.idempotency_key
+  }
+
+  // Build the request body. Resend tags are filtered/searchable in the dashboard
+  // and included in webhook payloads — useful for debugging deliverability.
+  const tags: Array<{ name: string; value: string }> = []
+  if (payload.purpose) tags.push({ name: 'purpose', value: payload.purpose })
+  if (payload.label) tags.push({ name: 'label', value: payload.label })
+
+  // RFC 8058 one-click unsubscribe headers. Gmail's bulk-sender rules
+  // require these for any sender doing >5000/day; doing it always is
+  // cheap insurance and improves deliverability at lower volumes too.
+  const customHeaders: Record<string, string> = {}
+  if (payload.unsubscribe_token) {
+    const unsubUrl = `${siteUrl}/unsubscribe?token=${encodeURIComponent(payload.unsubscribe_token)}`
+    customHeaders['List-Unsubscribe'] = `<${unsubUrl}>`
+    customHeaders['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click'
+  }
+
+  const body: Record<string, unknown> = {
+    from: payload.from,
+    to: payload.to,
+    subject: payload.subject,
+    html: payload.html,
+    text: payload.text,
+    reply_to: REPLY_TO,
+  }
+  if (tags.length > 0) body.tags = tags
+  if (Object.keys(customHeaders).length > 0) body.headers = customHeaders
+
+  const response = await fetch(RESEND_SEND_URL, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  })
+
+  if (response.ok) return
+
+  // Build a structured error so the caller's status-based branching works.
+  let errorBody: string
+  try {
+    errorBody = await response.text()
+  } catch {
+    errorBody = '(unable to read response body)'
+  }
+
+  let retryAfterSeconds: number | null = null
+  const retryAfter = response.headers.get('Retry-After')
+  if (retryAfter) {
+    const parsed = parseInt(retryAfter, 10)
+    if (!Number.isNaN(parsed)) retryAfterSeconds = parsed
+  }
+
+  throw new ResendAPIError(
+    `Resend API ${response.status}: ${errorBody}`,
+    response.status,
+    retryAfterSeconds
+  )
+}
+
 Deno.serve(async (req) => {
-  const apiKey = Deno.env.get('LOVABLE_API_KEY')
+  const apiKey = Deno.env.get('RESEND_API_KEY')
   const supabaseUrl = Deno.env.get('SUPABASE_URL')
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  const siteUrl = Deno.env.get('SITE_URL') ?? 'https://buildyourfootprint.com'
 
   if (!apiKey || !supabaseUrl || !supabaseServiceKey) {
     console.error('Missing required environment variables')
@@ -249,26 +353,17 @@ Deno.serve(async (req) => {
       }
 
       try {
-        await sendLovableEmail(
-          {
-            run_id: payload.run_id,
-            to: payload.to,
-            from: payload.from,
-            sender_domain: payload.sender_domain,
-            subject: payload.subject,
-            html: payload.html,
-            text: payload.text,
-            purpose: payload.purpose,
-            label: payload.label,
-            idempotency_key: payload.idempotency_key,
-            unsubscribe_token: payload.unsubscribe_token,
-            message_id: payload.message_id,
-          },
-          // sendUrl is optional — when LOVABLE_SEND_URL is not set, the library
-          // falls back to the default Lovable API endpoint (https://api.lovable.dev).
-          // Set LOVABLE_SEND_URL as a Supabase secret to override (e.g. for local dev).
-          { apiKey, sendUrl: Deno.env.get('LOVABLE_SEND_URL') }
-        )
+        await sendResendEmail(apiKey, siteUrl, {
+          to: payload.to,
+          from: payload.from,
+          subject: payload.subject,
+          html: payload.html,
+          text: payload.text,
+          purpose: payload.purpose,
+          label: payload.label,
+          idempotency_key: payload.idempotency_key,
+          unsubscribe_token: payload.unsubscribe_token,
+        })
 
         // Log success
         await supabase.from('email_send_log').insert({
