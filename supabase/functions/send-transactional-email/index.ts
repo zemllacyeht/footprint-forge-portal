@@ -1,21 +1,27 @@
 import * as React from 'npm:react@18.3.1'
 import { renderAsync } from 'npm:@react-email/components@0.0.22'
 import { createClient } from 'npm:@supabase/supabase-js@2'
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+// Inline CORS headers — the @supabase/supabase-js@2/cors subpath does not exist.
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
 import { TEMPLATES } from '../_shared/transactional-email-templates/registry.ts'
 
-// Configuration baked in at scaffold time — do NOT change these manually.
-// To update, re-run the email domain setup flow.
-const SITE_NAME = "footprint-forge-portal"
-// SENDER_DOMAIN is the verified sender subdomain FQDN (e.g., "notify.example.com").
-// It MUST match the subdomain delegated to Lovable's nameservers — never the root domain.
-// The email API looks up this exact domain; a mismatch causes "No email domain record found".
-const SENDER_DOMAIN = "notify.www.buildyourfootprint.com"
-// FROM_DOMAIN is the domain shown in the From: header (e.g., "example.com").
-// When display_from_root is enabled, this can be the root domain for cleaner branding,
-// even though actual sending uses the subdomain above.
-const FROM_DOMAIN = "www.buildyourfootprint.com"
-
+// Email sender configuration. Update both domain values together unless
+// intentionally splitting the verified send subdomain from the From: header
+// domain (e.g., when migrating the From: header to the apex domain later).
+const SITE_NAME = "Build Your Footprint"
+// SENDER_DOMAIN is the verified Resend sender subdomain — DKIM, SPF, and MX
+// records for this subdomain are configured in Cloudflare. The dispatcher
+// (process-email-queue) uses this value to route the send through Resend.
+const SENDER_DOMAIN = "send.buildyourfootprint.com"
+// FROM_DOMAIN is the domain shown in the From: header (used as `noreply@<FROM_DOMAIN>`).
+// Currently identical to SENDER_DOMAIN. To migrate the From: header to the apex
+// domain in a future phase, add `include:amazonses.com` to the apex SPF record
+// (merged with the existing Google Workspace include) and update this constant.
+const FROM_DOMAIN = "send.buildyourfootprint.com"
 // Generate a cryptographically random 32-byte hex token
 function generateToken(): string {
   const bytes = new Uint8Array(32)
