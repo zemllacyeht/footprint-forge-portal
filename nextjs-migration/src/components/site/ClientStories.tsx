@@ -491,14 +491,32 @@ export const ClientStories = () => {
                               outlineOffset: "-1px",
                             }}
                           >
-                            {/* gradient placeholder — real video assets to be added later */}
-                            <div
-                              className="absolute inset-0 w-full h-full"
-                              style={{
-                                background:
-                                  "radial-gradient(60% 50% at 50% 40%, hsl(var(--accent) / 0.18), hsl(var(--background)) 70%)",
-                              }}
-                            />
+                            {needsOptIn ? (
+                              <button
+                                className="absolute inset-0 w-full h-full flex items-center justify-center"
+                                style={{ background: "hsl(var(--background) / 0.85)" }}
+                                onClick={() => setOptedIn({ ...optedIn, [i]: true })}
+                              >
+                                <span
+                                  className="text-sm"
+                                  style={{ color: "hsl(var(--accent))", fontFamily: "'Inter Tight', Inter, sans-serif" }}
+                                >
+                                  Tap to load video
+                                </span>
+                              </button>
+                            ) : (
+                              <video
+                                ref={(el) => { videoRefs.current[i] = el; }}
+                                src={s.videoSrc}
+                                poster={s.poster}
+                                muted
+                                playsInline
+                                preload={preload}
+                                onTimeUpdate={() => onTimeUpdate(i)}
+                                onEnded={() => onVideoEnded(i)}
+                                className="absolute inset-0 w-full h-full object-cover"
+                              />
+                            )}
 
                             {/* number chip */}
                             <div
