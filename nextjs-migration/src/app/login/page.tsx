@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
@@ -19,7 +19,7 @@ const schema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters").max(72),
 });
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, role, loading } = useAuth();
@@ -156,5 +156,13 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
-  );
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
+  )
 }
