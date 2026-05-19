@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { AlertCircle, ChevronLeft, FileWarning, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronLeft, Copy, FileWarning, Loader2 } from "lucide-react";
 
 type TemplateStatus = "ready" | "preview_data_required" | "render_failed";
 
@@ -61,6 +61,17 @@ export function EmailTemplatesClient() {
     () => templates.find((t) => t.templateName === selectedName) ?? null,
     [templates, selectedName],
   );
+
+  const handleCopyHtml = async () => {
+    if (!selected?.html) return;
+    try {
+      await navigator.clipboard.writeText(selected.html);
+      toast.success("HTML copied to clipboard");
+    } catch (err) {
+      console.error("Clipboard write failed:", err);
+      toast.error("Could not copy. Select the HTML and copy manually.");
+    }
+  };
 
   const renderTopBar = () => (
     <div className="border-b border-border bg-background px-6 py-4 flex items-center gap-4">
@@ -168,6 +179,16 @@ export function EmailTemplatesClient() {
                   <span>·</span>
                   <span>{selected.status === "ready" ? "Ready" : selected.status === "preview_data_required" ? "No previewData" : "Render failed"}</span>
                   <span className="flex-1" />
+                  {showRawHtml && selected.html ? (
+                    <button
+                      type="button"
+                      onClick={handleCopyHtml}
+                      className="flex items-center gap-1 underline-offset-2 hover:underline"
+                    >
+                      <Copy className="h-3 w-3" />
+                      Copy
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     onClick={() => setShowRawHtml((v) => !v)}
@@ -212,7 +233,7 @@ export function EmailTemplatesClient() {
                     <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
                       Raw HTML ({selected.html.length} chars)
                     </summary>
-                    <pre className="mt-2 text-xs bg-muted p-3 rounded overflow-auto max-h-96">
+                    <pre className="mt-2 text-xs bg-muted p-3 rounded overflow-auto max-h-96 whitespace-pre-wrap break-all">
                       {selected.html}
                     </pre>
                   </details>
