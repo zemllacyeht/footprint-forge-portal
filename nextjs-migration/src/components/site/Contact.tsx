@@ -63,20 +63,52 @@ export const Contact = () => {
         ? `${parsed.data.message}\n\n— Selections: ${selectionsSummary}`
         : parsed.data.message;
 
-      const { error } = await supabase.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "contact-message-customer",
-          recipientEmail: parsed.data.email,
-          idempotencyKey: `contact-message-${id}`,
-          templateData: {
-            customerName: parsed.data.name,
-            business: parsed.data.business,
-            message: messageWithSelections,
-            selections: selectionsList,
-          },
-        },
+      const submittedAt = new Date().toLocaleString("en-US", {
+        dateStyle: "long",
+        timeStyle: "short",
       });
-      if (error) throw error;
+
+      const [customerRes, ownerRes] = await Promise.allSettled([
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "contact-message-customer",
+            recipientEmail: parsed.data.email,
+            idempotencyKey: `contact-message-${id}`,
+            templateData: {
+              customerName: parsed.data.name,
+              business: parsed.data.business,
+              message: messageWithSelections,
+              selections: selectionsList,
+            },
+          },
+        }),
+        supabase.functions.invoke("send-transactional-email", {
+          body: {
+            templateName: "contact-message-owner",
+            // recipientEmail is omitted — template defines a fixed `to`
+            idempotencyKey: `contact-message-${id}-owner`,
+            templateData: {
+              customerName: parsed.data.name,
+              customerEmail: parsed.data.email,
+              business: parsed.data.business,
+              message: messageWithSelections,
+              selections: selectionsList,
+              submittedAt,
+            },
+          },
+        }),
+      ]);
+
+      // Customer-facing confirmation is required — surface failure to the user.
+      if (customerRes.status === "rejected") throw customerRes.reason;
+      if (customerRes.value.error) throw customerRes.value.error;
+
+      // Owner notification is best-effort — log but don't block UX.
+      if (ownerRes.status === "rejected") {
+        console.error("Owner notification rejected:", ownerRes.reason);
+      } else if (ownerRes.value.error) {
+        console.error("Owner notification errored:", ownerRes.value.error);
+      }
       toast.success("Message received. We'll be in touch within 24 hours.");
       form.reset();
       setMessageChars(0);

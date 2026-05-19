@@ -12,6 +12,7 @@ export interface TemplateEntry {
 import { template as cartRequestOwner } from './cart-request-owner.tsx'
 import { template as cartRequestCustomer } from './cart-request-customer.tsx'
 import { template as contactMessageCustomer } from './contact-message-customer.tsx'
+import { template as contactMessageOwner } from './contact-message-owner.tsx'
 import { template as milestoneUpdate } from './milestone-update.tsx'
 import { template as approvalRequested } from './approval-requested.tsx'
 import { template as approvalDecided } from './approval-decided.tsx'
@@ -24,7 +25,8 @@ import { template as paymentReceipt } from './payment-receipt.tsx'
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'cart-request-owner': cartRequestOwner,
   'cart-request-customer': cartRequestCustomer,
-  'contact-message-customer': contactMessageCustomer,
+'contact-message-customer': contactMessageCustomer,
+  'contact-message-owner': contactMessageOwner,
   'milestone-update': milestoneUpdate,
   'approval-requested': approvalRequested,
   'approval-decided': approvalDecided,
