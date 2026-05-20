@@ -1,6 +1,6 @@
 import * as React from 'npm:react@18.3.1'
 import {
-  Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text,
+  Body, Button, Container, Head, Heading, Hr, Html, Img, Preview, Section, Text,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
@@ -29,6 +29,13 @@ const ContactMessageCustomerEmail = ({
         <Container style={card}>
           {/* Header */}
           <Section style={headerSection}>
+            <Img
+              src={`${SITE_URL}/email-logo.png`}
+              alt={SITE_NAME}
+              width="40"
+              height="40"
+              style={brandLogo}
+            />
             <Text style={brandKicker}>BUILD YOUR FOOTPRINT</Text>
             <Text style={brandOrnament}>✦</Text>
           </Section>
@@ -144,6 +151,16 @@ const headerSection = {
   padding: '40px 40px 20px 40px',
   textAlign: 'center' as const,
 }
+const brandLogo = {
+  display: 'block',
+  margin: '0 auto 12px',
+  width: '40px',
+  height: '40px',
+  border: 0,
+  outline: 'none',
+  textDecoration: 'none',
+}
+
 const brandKicker = {
   margin: 0,
   fontFamily: SANS_STACK,

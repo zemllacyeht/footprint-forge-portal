@@ -1,6 +1,6 @@
 import * as React from 'npm:react@18.3.1'
 import {
-  Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text,
+  Body, Button, Container, Head, Heading, Hr, Html, Img, Preview, Section, Text,
 } from 'npm:@react-email/components@0.0.22'
 
 export const SITE_NAME = 'Build Your Footprint'
@@ -32,6 +32,13 @@ export const EmailShell = ({ preview, children }: ShellProps) => (
       <Container style={shellOuter}>
         <Container style={shellCard}>
           <Section style={shellHeader}>
+            <Img
+              src={`${SITE_URL}/email-logo.png`}
+              alt={SITE_NAME}
+              width="40"
+              height="40"
+              style={shellLogo}
+            />
             <Text style={shellKicker}>BUILD YOUR FOOTPRINT</Text>
             <Text style={shellOrnament}>✦</Text>
           </Section>
@@ -70,6 +77,16 @@ export const PrimaryButton = ({ href, children }: { href: string; children: Reac
     <Button href={href} style={ctaButton}>{children}</Button>
   </Section>
 )
+
+const shellLogo = {
+  display: 'block',
+  margin: '0 auto 12px',
+  width: '40px',
+  height: '40px',
+  border: 0,
+  outline: 'none',
+  textDecoration: 'none',
+}
 
 const shellMain = {
   backgroundColor: '#ffffff',
